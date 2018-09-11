@@ -4,7 +4,8 @@
     <meta http-equiv="origin-trial" data-feature="WebVR" data-expires="2017-06-13" content="Av+kmgEvMcHg6hEKdPiW32muXnGZKlucZCp/BTvMrkLVNStJVsHV3TPz34LmJ5mESRnfUEIVVYHFgHNEpqguhgIAAABReyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXZyLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiV2ViVlIiLCJleHBpcnkiOjE0OTczMTIwMDB9">
 
     <!-- Frameworks and libraries -->
-    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-physics-system@1.4.0/dist/aframe-physics-system.min.js"></script>
     <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script>
 
     <script type="text/javascript">
@@ -13,6 +14,45 @@
       var options = {}
       var enterVR = new webvrui.EnterVRButton(renderer.domElement, options);
       document.body.appendChild(enterVR.domElement);
+
+      var extendDeep = AFRAME.utils.extendDeep;
+
+      // The mesh mixin provides common material properties for creating mesh-based primitives.
+      // This makes the material component a default component and maps all the base material properties.
+      var meshMixin = AFRAME.primitives.getMeshMixin();
+
+      AFRAME.registerPrimitive('a-box', extendDeep({}, meshMixin, {
+        // Preset default components. These components and component properties will be attached to the entity out-of-the-box.
+        defaultComponents: {
+          geometry: {primitive: 'box'}
+        },
+
+        // Defined mappings from HTML attributes to component properties (using dots as delimiters).
+        // If we set `depth="5"` in HTML, then the primitive will automatically set `geometry="depth: 5"`.
+        mappings: {
+          depth: 'geometry.depth',
+          height: 'geometry.height',
+          width: 'geometry.width'
+        }
+      }));
+
+      AFRAME.registerPrimitive('a-ocean', {
+        // Attaches the `ocean` component by default.
+        // Defaults the ocean to be parallel to the ground.
+        defaultComponents: {
+          ocean: {},
+          rotation: {x: -90, y: 0, z: 0}
+        },
+
+        // Maps HTML attributes to the `ocean` component's properties.
+        mappings: {
+          width: 'ocean.width',
+          depth: 'ocean.depth',
+          density: 'ocean.density',
+          color: 'ocean.color',
+          opacity: 'ocean.opacity'
+        }
+      });
     </script>
     
     <!--<script type="text/javascript" src="gamepadtest.js"></script>-->
@@ -39,12 +79,25 @@
     </style>
   </head>
   <body>
-    <a-scene webvr-ui>
+    <!--<a-scene webvr-ui>
       <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane src="basketball.jpg" position="0 0 -4" rotation="-90 90 0" width="25" height="20"></a-plane>
+      <a-plane src="basketball-bg.jpg" rotation="-90 90 0" width="25" height="20"></a-plane>
       <a-sky color="#BBBBBB"></a-sky>
+      <a-entity position="0 1.17 0" camera="active:false;userHeight:1.6" wasd-controls="" rotation="-11.001 34.148 0" look-controls="" aframe-injected="" data-aframe-inspector-original-camera="" data-aframe-inspector="default-camera"></a-entity>
+      <a-entity light="intensity:0.6;castShadow:true" position="-0.5 7.797 5.125" data-aframe-default-light="" aframe-injected=""></a-entity>
+      <a-entity light="color:#BBB" data-aframe-default-light="" aframe-injected="" position="0 7.906 -6.228"></a-entity>
+    </a-scene>-->
+
+    <a-scene webvr-ui="" class="fullscreen" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="enabled:false" physics>
+      <canvas class="a-canvas" data-aframe-canvas="true" width="300" height="150"></canvas>
+      <a-box position="-1 2 -3" rotation="0 45 0" color="#4CC3D9" dynamic-body></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" static-body></a-cylinder>
+      <a-plane src="basketball-bg.jpg" rotation="-90 90 0" width="25" height="20" static-body></a-plane>
+      <a-sky color="#BBBBBB"></a-sky> 
+      <a-ocean color="aqua" depth="100" width="100"></a-ocean>
     </a-scene>
   </body>
 </html>
