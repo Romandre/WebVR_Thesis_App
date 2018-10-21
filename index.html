@@ -1,19 +1,20 @@
 <!doctype html>
 <html>
   <head>
-    <meta http-equiv="origin-trial" data-feature="WebVR" data-expires="2017-06-13" content="Av+kmgEvMcHg6hEKdPiW32muXnGZKlucZCp/BTvMrkLVNStJVsHV3TPz34LmJ5mESRnfUEIVVYHFgHNEpqguhgIAAABReyJvcmlnaW4iOiJodHRwczovL2dvb2dsZXZyLmdpdGh1Yi5pbzo0NDMiLCJmZWF0dXJlIjoiV2ViVlIiLCJleHBpcnkiOjE0OTczMTIwMDB9">
+    <meta charset="utf-8">
+    <meta data-feature="WebVR">
 
     <!-- Frameworks and libraries -->
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
     <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.2.0/dist/aframe-physics-system.min.js"></script>
+    <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
     <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script>
 
-    <!-- Init webvrui -->
-    <script src="src/script/webvrui.js" />
-
-    <script type="text/javascript">
-      
-    </script>
+    <script src="https://unpkg.com/aframe-animation-component@3.2.1/dist/aframe-animation-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras.ocean@%5E3.5.x/dist/aframe-extras.ocean.min.js"></script>
+    <script src="https://unpkg.com/aframe-gradient-sky@1.0.4/dist/gradientsky.min.js"></script>
+    <script src="https://unpkg.com/aframe-extras.tube@%5E3.5.x/dist/aframe-extras.tube.min.js"></script>
     
     <!--<script type="text/javascript" src="gamepadtest.js"></script>-->
     <style>
@@ -37,23 +38,30 @@
       border: 1px solid red;
     }
     </style>
+
+    
   </head>
   <body>
-    <!--<a-scene webvr-ui>
-      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane src="basketball-bg.jpg" rotation="-90 90 0" width="25" height="20"></a-plane>
-      <a-sky color="#BBBBBB"></a-sky>
-      <a-entity position="0 1.17 0" camera="active:false;userHeight:1.6" wasd-controls="" rotation="-11.001 34.148 0" look-controls="" aframe-injected="" data-aframe-inspector-original-camera="" data-aframe-inspector="default-camera"></a-entity>
-      <a-entity light="intensity:0.6;castShadow:true" position="-0.5 7.797 5.125" data-aframe-default-light="" aframe-injected=""></a-entity>
-      <a-entity light="color:#BBB" data-aframe-default-light="" aframe-injected="" position="0 7.906 -6.228"></a-entity>
-    </a-scene>-->
-
+    <script src="src/script/ball.js"></script>
+    
     <a-scene webvr-ui class="fullscreen" physics>
-      <a-entity camera="active: true" look-controls wasd-controls position="0 1.7 0"></a-entity>
+      <a-camera id="camera" look-controls wasd-controls position="0 1.75 0" data-aframe-default-camera>
+        <a-entity cursor="fuse: true; fuseTimeout: 500"
+            position="0 0 -1"
+            geometry="primitive: circle; radius: 0.007"
+            material="color: black; shader: flat; opacity: 0.4"></a-entity>
+            <a-sphere id="ball" ball-events src="src/textures/balldimpled.png" radius="1.25" color="#EF2D5E" material="color:#ff9622" geometry="radius:0.16" dynamic-body="" mass="5" rotation="0 0 0" velocity="" shadow></a-sphere>
+      </a-camera>
 
-      <a-sky color="#87ceeb"></a-sky> 
+      
+
+      <a-sky color="#87ceeb"></a-sky>
+
+      <!-- <a-entity id="ocean" ocean="density: 20; width: 50; depth: 50; speed: 1"
+                material="color: #9CE3F9; opacity: 0.75; metalness: 0; roughness: 1"
+                rotation="-90 0 0"></a-entity> -->
+
+      <a-text value="00" color="#f20000" position="-0.23258935576853024 4.943195670737988 -10.422916031131408" scale="1.5 1.5 1.5"></a-text>
 
       <!--------------> 
       <!-- Building -->
@@ -94,11 +102,10 @@
       <a-box position="-0.01327844524949022 0.01654873162503756 11.799238424831875" color="#4CC3D9" material="color:#3c3c3c" geometry="width:1.5;depth:0.8;height:0.1" rotation="-3.013047660283962e-8 0 -0.000001126271860120327" velocity=""></a-box>
       <a-cylinder position="0 1.7385491323987807 11.79240522412766" radius="0.5" height="1.5" color="#FFC65D" static-body="sphereRadius:NaN" material="color:#6a6a6a" geometry="radius:0.08;height:3.5"></a-cylinder>
 
-      <a-sphere src="src/textures/balldimpled.png" position="0 2.150 -1.7641871996571596" radius="1.25" color="#EF2D5E" material="color:#ff9622" geometry="radius:0.16" dynamic-body="sphereRadius:NaN;mass:5;shape:sphere;angularDamping:1" mass="5" rotation="0 0 -9.644931967911499e-11" velocity=""></a-sphere>
-
-    
       
     </a-scene>
+
+    
   </body>
 </html>
 
