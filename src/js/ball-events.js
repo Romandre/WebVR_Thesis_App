@@ -4,7 +4,8 @@
   * 1) Make basket ring so it can let ball go through;
   * 2) Count baskets;
   * 3) Power increase indicator;
-  * 4) Improve scene and environment appearance
+  * 4) Improve scene and environment appearance;
+  * 5) Change fieldы markup lines texture;
   * 5) Add sound effects  
   *
   */
