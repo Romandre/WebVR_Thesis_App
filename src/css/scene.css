@@ -34,3 +34,8 @@ button.webvr-ui-button {
 	opacity: 0.8;
 }
 
+
+.aframe-inspector-opened .github,
+.aframe-inspector-opened .controls {
+	display: none !important;
+}

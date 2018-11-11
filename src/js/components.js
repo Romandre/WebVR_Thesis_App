@@ -1,14 +1,15 @@
 var ballIsUp = false;
 var keepBallAttached = false;
 
+
 /****************************\
 |* Register scene component *|
 \****************************/
 AFRAME.registerComponent('#field', {
   init: function (oldData) {
     el = this.el.object3D;
-      el.visible = this.data;
-    }
+    el.visible = this.data;
+  }
 });
 
 
@@ -18,8 +19,8 @@ AFRAME.registerComponent('#field', {
 AFRAME.registerComponent('#camera', {
 	init: function (oldData) {
 		el = this.el.object3D;
-	    el.visible = this.data;
-  	}
+    el.visible = this.data;
+	}
 });
 
 
@@ -29,8 +30,14 @@ AFRAME.registerComponent('#camera', {
 AFRAME.registerComponent('ball-events', {
   init: function () {
     ball = this.el;
-    ball.object3D.position.set(0, 0.01, -1.76);
-
+    ball.object3D.position.set(0, 2, -1.76);
+    setTimeout( function() {
+      ball.body.applyImpulse(
+        new CANNON.Vec3(getRandomNum(), 0, getRandomNum()),
+        new CANNON.Vec3()
+      );
+    }, 100);
+    
     var camera, cameraPos, cameraRot;
     camera = document.querySelector('#camera').object3D;
 
@@ -68,16 +75,19 @@ AFRAME.registerComponent('ball-events', {
       /* If space is tapped */
       if (e.keyCode == 32 && ballIsUp) {
         keepBallAttached = false;
-        ball.setAttribute('dynamic-body', '');
 
-        if (countKeyHold >= 28) {
-          countKeyHold = 28;
+        if (countKeyHold >= 21) {
+          countKeyHold = 21;
         }
         var power = countKeyHold*1.8;
-        countKeyHold = 0;
         throwBall(ball, cameraPos, cameraRot, power);
-
+        
+        countKeyHold = 0;
         ballIsUp = false;
+      } else if (e.keyCode == 32 && !ballIsUp) {
+        keepBallAttached = false;
+        ballIsUp = false;
+        ball.setAttribute('dynamic-body', '');        
       }
     });
 
@@ -86,10 +96,24 @@ AFRAME.registerComponent('ball-events', {
       /* If "e" key is tapped */
       if (e.keyCode == 69 && ballIsUp) {
         keepBallAttached = false;
-        ball.setAttribute('dynamic-body', '');
-        cameraPos = camera.position;
-        cameraRot = camera.rotation;
         ballIsUp = false;
+        ball.setAttribute('dynamic-body', '');
+      }
+    });
+
+    /** Reset the ball to original position **/
+    window.addEventListener("keyup", (e) => {
+      /* If "e" key is tapped */
+      if (e.keyCode == 82) {
+        keepBallAttached = false;
+        ballIsUp = false;
+        ball.removeAttribute('dynamic-body');
+        ball.object3D.position.set(0, 2, -1.76);
+        ball.setAttribute('dynamic-body', '');
+        ball.body.applyImpulse(
+          new CANNON.Vec3(getRandomNum(), 0, getRandomNum()),
+          new CANNON.Vec3()
+        );
       }
     });
   },
@@ -104,3 +128,33 @@ AFRAME.registerComponent('ball-events', {
     }
   }
 });
+
+
+function getRandomNum() {
+  var negOrPos = Math.random() < 0.5 ? -1 : 1;
+  return (Math.random() * (1.5 - 1) + 1) * negOrPos;
+}
+
+
+/** Testing assets and loading detection 
+
+AFRAME.registerComponent('#loader', {
+  init: function (oldData) {
+      el = this.el;
+      el.visible = this.data;
+
+      el.addEventListener('loaded', function () {
+        console.log("OK LOADED");
+      });
+    }
+});
+
+AFRAME.registerComponent('log', {
+  schema: {type: 'string'},
+  init: function () {
+    var stringToLog = this.data;
+    console.log(stringToLog);
+  }
+});
+
+**/

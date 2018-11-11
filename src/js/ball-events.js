@@ -35,6 +35,7 @@ function pickUpBall(ball, cameraPos, cameraRot, interPoint, time, timeDelta) {
 }
 
 function throwBall(ball, cameraPos, cameraRot, power) {
+  ball.setAttribute('dynamic-body', '');
   ball.body.applyImpulse(
     /* impulse */        new CANNON.Vec3(-Math.sin(cameraRot.y)*power, (Math.sin(cameraRot.x)*power)*2, -Math.cos(cameraRot.y)*power),
     /* world position */ new CANNON.Vec3()
