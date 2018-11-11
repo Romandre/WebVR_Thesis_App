@@ -1,3 +1,19 @@
+.github {
+	position: absolute; 
+	top: 0; 
+	right: 0;
+	z-index: 99999999
+}
+
+.github img {
+	opacity: 0.6;
+	cursor: pointer;
+}
+.github img:hover {
+	opacity: 1;
+}
+
 button.webvr-ui-button {
 	opacity: 0.8;
 }
+

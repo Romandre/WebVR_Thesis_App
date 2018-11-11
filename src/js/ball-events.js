@@ -3,8 +3,9 @@
   * TODO: 
   * 1) Make basket ring so it can let ball go through;
   * 2) Count baskets;
-  * 3) Improve scene and environment appearance
-  * 4) Add sound effects  
+  * 3) Power increase indicator;
+  * 4) Improve scene and environment appearance
+  * 5) Add sound effects  
   *
   */
 

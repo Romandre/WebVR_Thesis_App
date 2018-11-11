@@ -22,11 +22,14 @@
   </head>
   
   <body>
+    <div class="github">
+      <a href="https://github.com/Romandre/WebVR_Thesis_App" target="_blank"><img src="src/img/github.png" width="70"></a>
+    </div>
+
     <script type="text/javascript" src="src/js/components.js"></script>
     <script type="text/javascript" src="src/js/ball-events.js"></script>
     
-    <a-scene webvr-ui id="field" class="fullscreen" physics>
-    
+    <a-scene webvr-ui id="field" class="fullscreen" physics>    
       <a-camera id="camera" look-controls wasd-controls position="0 1.75 0" data-aframe-default-camera>
         <a-entity cursor="fuse: true; fuseTimeout: 500"
             position="0 0 -1"
