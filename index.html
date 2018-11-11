@@ -5,87 +5,103 @@
     <meta data-feature="WebVR">
 
     <!-- Frameworks and libraries -->
-    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
-    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.2.0/dist/aframe-physics-system.min.js"></script>
-    <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
-    <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script>
+    <script type="text/javascript" src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script type="text/javascript" src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.2.0/dist/aframe-physics-system.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
+    <script type="text/javascript" src="src/webvr-ui-master/build/webvr-ui.min.js"></script> 
 
     <!-- Styles, scene related --> 
     <link rel="stylesheet" href="src/css/scene.css">
 
     <!-- Extras for gamepad camera controls -->
-    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v4.2.0/dist/aframe-extras.min.js"></script>
+    <script type="text/javascript" src="//cdn.rawgit.com/donmccurdy/aframe-extras/v4.2.0/dist/aframe-extras.min.js"></script>
     <!-- Gamepad test
-    <script type="text/javascript" src="src/script/gamepadtest.js"></script>
-    <link rel="stylesheet" href="src/css/test-gamepad.css">
+    <script type="text/javascript" src="src/js/gamepadtest.js"></script>
+    <link rel="stylesheet" href="src/css/gamepadtest.css">
     -->    
   </head>
   
   <body>
-    <script src="src/script/ball.js"></script>
+    <script type="text/javascript" src="src/js/components.js"></script>
+    <script type="text/javascript" src="src/js/ball-events.js"></script>
     
-    <a-scene webvr-ui class="fullscreen" physics>
+    <a-scene webvr-ui id="field" class="fullscreen" physics>
+    
       <a-camera id="camera" look-controls wasd-controls position="0 1.75 0" data-aframe-default-camera>
         <a-entity cursor="fuse: true; fuseTimeout: 500"
             position="0 0 -1"
             geometry="primitive: circle; radius: 0.007"
-            material="color: black; shader: flat; opacity: 0.4"></a-entity>            
+            material="color: black; shader: flat; opacity: 0.4">              
+        </a-entity>
       </a-camera>
 
-      <a-sphere id="ball" ball-events src="src/textures/balldimpled.png" radius="1.25" color="#EF2D5E" material="color:#ff9622" geometry="radius:0.16" dynamic-body="" mass="5" rotation="0 0 0" velocity="" 
-      shadow></a-sphere>
+      <a-sphere ball-events id="ball" src="src/textures/ball.png" material="normalMap:src/textures/ball_normal.png;color:#ff9622" geometry="radius:0.16" 
+      dynamic-body="angularDamping:0.05;linearDamping:0.05" mass="5" rotation="0 0 0" velocity="" shadow></a-sphere>
 
-      <a-sky color="#87ceeb"></a-sky>
-
-      <a-text value="00" color="#f20000" position="-0.23258935576853024 4.943195670737988 -10.422916031131408" scale="1.5 1.5 1.5"></a-text>
+      <a-sky color="#87ceeb"></a-sky>     
 
       <!--------------> 
       <!-- Building -->
       <!-------------->
-      <a-plane material="src:src/textures/basketball-lines.png;shader:flat;transparent:true" rotation="-90 90 0" static-body="sphereRadius:NaN" geometry="width:25;height:26" position="0 0.002 0" 
-      velocity=""></a-plane>
-      <a-plane material="src:src/textures/wooden-floor-3.jpg;repeat:11 21" color="#fedbbc" rotation="-90 90 0" static-body="sphereRadius:NaN" geometry="width:40;height:30" velocity=""></a-plane>
+
+      <!-- Floor -->
+      <a-plane material="src:src/textures/basketball-lines.png;shader:flat;transparent:true" rotation="-90 90 0" static-body geometry="width:25;height:26" 
+      position="0 0.002 0" velocity=""></a-plane>
+      <a-plane material="src:src/textures/wooden-floor-3.jpg;repeat:11 21" color="#fedbbc" rotation="-90 90 0" static-body geometry="width:40;height:30" velocity=""></a-plane>
       <!-- Right wall -->
-      <a-plane material="src:src/textures/wall.jpg;repeat:20 5" rotation="180 90 0" width="25" height="21" static-body="sphereRadius:NaN" position="14.6 3.5 0" material="color:#d3d3d3" 
-      geometry="width:40;height:7" velocity=""></a-plane>
+      <a-box material="src:src/textures/wall.jpg; repeat:20 5; side: double" rotation="180 90 0" width="25" height="21" static-body position="14.6 3.5 0" 
+      material="color:#d3d3d3" geometry="width:40;height:7;depth:0.4"></a-box>
+      <a-plane material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" width="25" height="21" static-body position="14.6 11.230596317000915 0" geometry="width:40;height:9"></a-plane>
       <!-- Left wall -->
-      <a-plane material="src:src/textures/wall.jpg;repeat:20 5" rotation="360 90 0" width="25" height="21" static-body="sphereRadius:NaN" position="-14.6 3.5 0" material="color:#d3d3d3" 
-      geometry="width:40;height:7" velocity=""></a-plane>
+      <a-box material="src:src/textures/wall.jpg; repeat:20 5; side: double" rotation="360 90 0" width="25" height="21" static-body position="-14.6 3.5 0" material="color:#d3d3d3" 
+      geometry="width:40;height:7;depth:0.4"></a-box>
+      <a-plane material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" width="25" height="21" static-body position="-14.6 11.230596317000915 0" geometry="width:40;height:9"></a-plane>
       <!-- Front wall -->
-      <a-plane material="src:src/textures/wall.jpg;repeat:20 16" rotation="360 0 0" width="25" height="21" static-body="sphereRadius:NaN" position="0 8 -19.965551568245235" color="#d3d3d3" geometry="width:30;height:17" velocity=""></a-plane>
+      <a-box material="src:src/textures/wall.jpg; repeat:20 16; side: double" rotation="360 0 0" width="25" height="21" static-body position="0 8 -19.965" color="#d3d3d3" 
+      geometry="width:30;height:17;depth:0.4"></a-box>
+      <!-- Back wall -->
+      <a-box material="src:src/textures/wall.jpg; repeat:20 16; side: double" rotation="360 0 0" width="25" height="21" static-body position="0 8 19.965" color="#d3d3d3" 
+      geometry="width:30;height:17;depth:0.4"></a-box>
 
       <!-- Front net -->
-      <a-box src="src/textures/black-plastic-texture.jpg" position="0 0.13190934689389777 -12.72" material="color:#FFF" geometry="width:1.5;depth:0.8;height:0.1" rotation="-0.000009807431575451989 0 5.743500821546174e-7" velocity="" scale="1 3.6889946563274436 2.3761774198298604"></a-box>
-      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:20 10" position="0 1.43423137276096 -12.83972755721055" radius="0.5" height="1.5" static-body="sphereRadius:NaN" geometry="radius:0.03;height:3.5" scale="1.399077114396602 0.8269362213454001 1" velocity="" rotation="30.79921165527345 0 0"></a-cylinder>
-      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:1 4" position="0 1.5489717184496627 -12.065682538578855" radius="0.5" height="1.5" static-body="sphereRadius:NaN" geometry="radius:0.08;height:3.5" scale="1.399077114396602 0.7979907781732143 1" velocity=""></a-cylinder>
-      <a-entity material="src:src/textures/black-plastic-texture.jpg" position="0 2.9375308606486175 -12.068011154263933" scale="0.1129646049483426 0.105998900389824 0.07875757198415904" geometry="primitive:sphere"></a-entity>
-      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:1 2" position="0 3.3096666809301847 -11.702544193649782" radius="0.5" height="1.5" static-body="sphereRadius:NaN" geometry="radius:0.08;height:1" rotation="45.790025879185485 0 0" scale="1.36485316396349 1 1" velocity=""></a-cylinder>
-      <a-entity material="src:src/textures/black-plastic-texture.jpg" position="0 3.651813388986135 -11.330642539364328" rotation="-1.6541973515295516 0 0" scale="0.11460690804829819 0.08676567051748131 0.11276457175090827" geometry="primitive:sphere"></a-entity>
-      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:1 2" position="0 3.6564599977315786 -10.810201570353863" radius="0.5" height="1.5" color="#333333" static-body="sphereRadius:NaN"  geometry="radius:0.08;height:1" rotation="90 180 180" scale="1.3989462550147262 1.0099870533271567 1" velocity=""></a-cylinder>
-      <a-cylinder position="0.3 4 -10.72" radius="0.5" height="1.5" color="#333333" static-body="sphereRadius:NaN" geometry="radius:0.01;height:1" rotation="58.37 13.23 -20.275" scale="1.36485316396349 1.176 1" velocity=""></a-cylinder>
-      <a-cylinder position="-0.3 4 -10.72" radius="0.5" height="1.5" color="#333333" static-body="sphereRadius:NaN" geometry="radius:0.01;height:1" rotation="58.37 -60.408895855552174 -20.275000000000002" 
-      scale="1.36485316396349 1.176 1" velocity=""></a-cylinder>
-      <a-entity position="0.605780069156661 4.289627136525414 -10.307044965771244" scale="0.13300133472779518 0.100123814346936 0.10266980201317816" geometry="primitive:sphere;radius:0.1" 
+      <a-box src="src/textures/black-plastic-texture.jpg" position="0 0.13190934689389777 -12.72" material="color:#FFF" static-body geometry="width:1.5;depth:0.8;height:0.1" 
+      scale="1 3.6889946563274436 2.3761774198298604"></a-box>
+      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:20 10" position="0 1.23 -12.84" radius="0.5" height="1.5" static-body geometry="radius:0.03;height:3.08"
+      scale="0.98 0.86 1" rotation="36 0 0"></a-cylinder>
+      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:1 4" position="0 1.2489717184496627 -12.065682538578855" radius="0.5" height="1.5" static-body 
+      geometry="radius:0.08;height:2.8" scale="1.399077114396602 0.7979907781732143 1"></a-cylinder>
+      <a-entity material="src:src/textures/black-plastic-texture.jpg" position="0 2.3375308606486175 -12.068011154263933" scale="0.1129646049483426 0.105998900389824 0.07875757198415904" 
+      geometry="primitive:sphere"></a-entity>
+      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:1 2" position="0 2.7096666809301847 -11.702544193649782" radius="0.5" height="1.5" static-body 
+      geometry="radius:0.08;height:1" rotation="45.790025879185485 0 0" scale="1.36485316396349 1 1"></a-cylinder>
+      <a-entity material="src:src/textures/black-plastic-texture.jpg" position="0 3.051813388986135 -11.330642539364328" rotation="-1.6541973515295516 0 0" 
+      scale="0.11460690804829819 0.08676567051748131 0.11276457175090827" geometry="primitive:sphere"></a-entity>
+      <a-cylinder material="src:src/textures/black-plastic-texture.jpg;repeat:1 2" position="0 3.0564599977315786 -10.810201570353863" radius="0.5" height="1.5" color="#333333" static-body 
+      geometry="radius:0.08;height:1" rotation="90 180 180" scale="1.3989462550147262 1.0099870533271567 1"></a-cylinder>
+      <a-cylinder position="0.3 3.4 -10.72" radius="0.5" height="1.5" color="#333333" static-body geometry="radius:0.01;height:1" rotation="58.37 13.23 -20.275" scale="1.36485316396349 1.176 1"></a-cylinder>
+      <a-cylinder position="-0.3 3.4 -10.72" radius="0.5" height="1.5" color="#333333" static-body geometry="radius:0.01;height:1" rotation="58.37 -60.408895855552174 -20.275000000000002" 
+      scale="1.36485316396349 1.176 1"></a-cylinder>
+      <a-entity position="0.605780069156661 3.689627136525414 -10.307044965771244" scale="0.13300133472779518 0.100123814346936 0.10266980201317816" geometry="primitive:sphere;radius:0.1" 
       material="color:#333333"></a-entity>
-      <a-entity position="-0.605780069156661 4.289627136525414 -10.307044965771244" scale="0.13300133472779518 0.100123814346936 0.10266980201317816" geometry="primitive:sphere;radius:0.1" 
+      <a-entity position="-0.605780069156661 3.689627136525414 -10.307044965771244" scale="0.13300133472779518 0.100123814346936 0.10266980201317816" geometry="primitive:sphere;radius:0.1" 
       material="color:#333333"></a-entity>
-      <a-entity position="0 3.6 -10.3" rotation="0 0 90" scale="0.05 1.8 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="0 4.6 -10.3" rotation="0 0 90" scale="0.05 1.8 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="-0.918 4.1 -10.3" scale="0.05 1.048 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="0.918 4.1 -10.3" scale="0.05 1.048 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="0 3.69 -10.3" rotation="0 0 90" scale="0.05 0.76 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="0 4.26 -10.3" rotation="0 0 90" scale="0.05 0.76 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="-0.3961353203516701 3.9749188926854924 -10.3" scale="0.05 0.6203187159095053 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="0.3961353203516701 3.9749188926854924 -10.3" scale="0.05 0.6203187159095053 0.05" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="0 3.6963459637420244 -10.237442687206592" rotation="0 0 90" scale="-0.020913829786905414 0.11538383452349 0.09426256725673028" geometry="" mixin="null" material="color:#141414"></a-entity>
-      <a-entity position="0 4.1 -10.3" scale="1.8032521833478072 1 0.02" material="color:#c0c0c0;vertexColors:face;opacity:0.5" geometry=""></a-entity>
-      <a-entity position="0 3.71 -9.92" rotation="90 0 0" scale="0.6 0.6 0.55" geometry="primitive:torus;arc:360.38;radius:0.45;radiusTubular:0.02" velocity="" body="sphereRadius:NaN;shape:sphere;type:static" material="color:#ff0000"></a-entity>
+      <a-entity position="0 3 -10.3" rotation="0 0 90" scale="0.05 1.8 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="0 4 -10.3" rotation="0 0 90" scale="0.05 1.8 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="-0.918 3.5 -10.3" scale="0.05 1.048 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="0.918 3.5 -10.3" scale="0.05 1.048 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="0 3.09 -10.3" rotation="0 0 90" scale="0.05 0.76 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="0 3.66 -10.3" rotation="0 0 90" scale="0.05 0.76 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="-0.3961353203516701 3.3749188926854924 -10.3" scale="0.05 0.6203187159095053 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="0.3961353203516701 3.3749188926854924 -10.3" scale="0.05 0.6203187159095053 0.05" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="0 3.0963459637420244 -10.237442687206592" rotation="0 0 90" scale="-0.020913829786905414 0.11538383452349 0.09426256725673028" static-body geometry="" mixin="null" material="color:#141414"></a-entity>
+      <a-entity position="0 3.5 -10.3" scale="1.8032521833478072 1 0.02" material="color:#c0c0c0;vertexColors:face;opacity:0.5" static-body geometry=""></a-entity>
+      <a-entity position="0 3.11 -9.92" rotation="90 0 0" scale="0.6 0.6 0.55" static-body geometry="primitive:torus;arc:360.38;radius:0.45;radiusTubular:0.02" velocity="" body="sphereRadius:NaN;shape:sphere;type:static" material="color:#ff0000"></a-entity>
+
+      <a-text value="00" color="#f20000" position="-0.23258935576853024 4.343195670737988 -10.422916031131408" scale="1.5 1.5 1.5"></a-text>
 
       <!-- Back net -->
       <a-box position="-0.01327844524949022 0.01654873162503756 11.799238424831875" color="#4CC3D9" material="color:#3c3c3c" geometry="width:1.5;depth:0.8;height:0.1" rotation="-3.013047660283962e-8 0 -0.000001126271860120327" velocity=""></a-box>
       <a-cylinder position="0 1.7385491323987807 11.79240522412766" radius="0.5" height="1.5" color="#FFC65D" static-body="sphereRadius:NaN" material="color:#6a6a6a" geometry="radius:0.08;height:3.5"></a-cylinder>
-
     </a-scene>
   </body>
 </html>
-
