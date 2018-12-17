@@ -2,7 +2,7 @@
 	position: absolute; 
 	top: 10px; 
 	right: 10px;
-	z-index: 99999999;
+	z-index: 1;
 }
 
 .github img {
@@ -21,7 +21,7 @@
 	padding: 2px 30px;
 	font-size: 14px;
 	background-color: rgba(255,255,255,0.4);
-	z-index: 99999999;
+	z-index: 1;
 }
 .controls h4 {
 	margin: 8px 0;
@@ -34,8 +34,24 @@ button.webvr-ui-button {
 	opacity: 0.8;
 }
 
-
 .aframe-inspector-opened .github,
 .aframe-inspector-opened .controls {
 	display: none !important;
+}
+
+#powerbar {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -40px 0 0 -40px;
+	width: 80px;
+  	height: 80px;
+  	opacity: 0.75;
+  	z-index: 1;
+}
+
+@media only screen and (max-width: 812px) {
+    .controls {
+    	display: none;
+    }
 }

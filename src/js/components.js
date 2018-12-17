@@ -30,7 +30,7 @@ AFRAME.registerComponent('#camera', {
 AFRAME.registerComponent('ball-events', {
   init: function () {
     ball = this.el;
-    ball.object3D.position.set(0, 2, -1.76);
+    ball.object3D.position.set(0, 3, -1.76);
     setTimeout( function() {
       ball.body.applyImpulse(
         new CANNON.Vec3(getRandomNum(), 0, getRandomNum()),
@@ -65,30 +65,39 @@ AFRAME.registerComponent('ball-events', {
       
     /** Throw the ball event **/
     var countKeyHold = 0;
+    var fired = false;
+    /* If space is tapped */
     window.addEventListener("keydown", (e) => {
       if (e.keyCode == 32 && ballIsUp) {
         ++countKeyHold;
-        console.log("Consecutive keyDown events: " + countKeyHold*1.8);
+        //console.log("Consecutive keyDown events: " + countKeyHold*1.3); 
+        if(!fired) {
+          fired = true;
+          circle.set(0);
+          circle.animate(1);
+        }
       }
     });
+    /* If space is released */
     window.addEventListener("keyup", (e) => {
-      /* If space is tapped */
+      circle.stop();
+      setTimeout(function() {
+        circle.animate(0);
+      }, 200);
+      fired = false;
+
       if (e.keyCode == 32 && ballIsUp) {
         keepBallAttached = false;
 
-        if (countKeyHold >= 21) {
-          countKeyHold = 21;
+        if (countKeyHold > 22) {
+          countKeyHold = 22;
         }
-        var power = countKeyHold*1.8;
+        var power = countKeyHold*1.3;
         throwBall(ball, cameraPos, cameraRot, power);
         
         countKeyHold = 0;
         ballIsUp = false;
-      } else if (e.keyCode == 32 && !ballIsUp) {
-        keepBallAttached = false;
-        ballIsUp = false;
-        ball.setAttribute('dynamic-body', '');        
-      }
+      } 
     });
 
     /** Drop the ball event **/
@@ -108,7 +117,7 @@ AFRAME.registerComponent('ball-events', {
         keepBallAttached = false;
         ballIsUp = false;
         ball.removeAttribute('dynamic-body');
-        ball.object3D.position.set(0, 2, -1.76);
+        ball.object3D.position.set(0, 3, -1.76);
         ball.setAttribute('dynamic-body', '');
         ball.body.applyImpulse(
           new CANNON.Vec3(getRandomNum(), 0, getRandomNum()),
