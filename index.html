@@ -10,16 +10,14 @@
     <link rel="icon" type="image/png" href="src/img/favicon-32x32.png" sizes="32x32">
 
     <!-- Frameworks and libraries -->
-    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
-    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.2.0/dist/aframe-physics-system.min.js"></script>
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v5.0.1/dist/aframe-extras.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.min.js"></script>
     <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
-    <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script> 
+    <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script>
 
     <!-- Styles, scene related --> 
     <link rel="stylesheet" href="src/css/scene.css">
-
-    <!-- Extras for gamepad camera controls -->
-    <script type="text/javascript" src="//cdn.rawgit.com/donmccurdy/aframe-extras/v4.2.0/dist/aframe-extras.min.js"></script>
 
     <!-- Progress bar js -->
     <script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
@@ -49,48 +47,35 @@
 
     <script type="text/javascript" src="src/js/components.js"></script>
     <script type="text/javascript" src="src/js/ball-events.js"></script>
+    <script type="text/javascript" src="src/js/powerbar.js"></script>
 
-    <script type="text/javascript">
-      var circle = new ProgressBar.Circle('#powerbar', {
-        strokeWidth: 10,
-        easing: 'easeInOut',
-        duration: 1500,
-        color: '#E94B3C',
-        from: {color: '#E94B3C'},
-        to: {color: '#14B414'},
-        // Set default step function for all animate calls
-        step: function(state, circle) {
-          circle.path.setAttribute('stroke', state.color);
-        }
-      });
-    </script>
     
     <!-- SCENE -->
-    <a-scene webvr-ui id="field" class="fullscreen" physics="gravity: -9.8; friction: 0.8; restitution: 0.7" light="defaultLightsEnabled:false" shadow>  
+    <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.7" light="defaultLightsEnabled:false">
 
-      <!-- Testing assets and loading detection --> 
-      <!-- <a-assets id="loader" timeout="1000"></a-assets>
-      <a-box log="Hello, Box!"></a-box> -->
+      <a-sky color="#87ceeb"></a-sky>  
 
-      <a-camera id="camera" look-controls wasd-controls position="0 1.75 0" data-aframe-default-camera>
-        <a-entity cursor="fuse: true; fuseTimeout: 500"
-            position="0 0 -1"
-            geometry="primitive: circle; radius: 0.007"
-            material="color: black; shader: flat; opacity: 0.4">              
+      <!-- Player/camera --> 
+      <a-entity id="player" kinematic-body="radius: 0.2; mass: 50" position="0 0 0" movement-controls>
+        <a-entity id="camera" camera position="0 1.75 0" look-controls="pointerLockEnabled: true" velocity rotation>
+          <a-entity cursor="fuse: true; fuseTimeout: 500"
+              position="0 0 -1"
+              geometry="primitive: circle; radius: 0.007"
+              material="color: black; shader: flat; opacity: 0.4">              
+          </a-entity>
         </a-entity>
-      </a-camera>
+      </a-entity>
 
       <a-sphere ball-events id="ball" src="src/textures/ball.png" material="normalMap:src/textures/ball_normal.png; color:#ff9622; roughness: 0.45" 
-      geometry="radius:0.16" dynamic-body="linearDamping:0.1; angularDamping:0.6" mass="10" rotation="0 0 0" shadow></a-sphere>
+      geometry="radius:0.16" dynamic-body="linearDamping: 0.1; angularDamping: 0.4; mass: 4" rotation shadow></a-sphere>
 
-      <a-sky color="#87ceeb"></a-sky>     
 
       <!--------------> 
       <!-- Building -->
       <!-------------->
 
       <!-- Floor -->
-      <a-plane rotation="-90 90 0" geometry="width:40;height:30" position="0 -0.09 0" static-body></a-plane>
+      <a-plane rotation="-90 90 0" geometry="width:40;height:30" position="0 -0.11 0" static-body></a-plane>
       <a-plane material="src:src/textures/wooden-floor-3.jpg;repeat:11 21" color="#fedbbc" rotation="-90 90 0" geometry="width:40;height:30" shadow="cast:false"></a-plane>
       <a-plane material="src:src/textures/basketball-lines.png;transparent:true" rotation="-90 90 0" geometry="width:25;height:26" position="0 0.01 0" shadow="cast:false"></a-plane>  
       
