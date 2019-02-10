@@ -10,11 +10,11 @@
   *
   */
 
-function takeBallHandler(evt, ball, player, camera, ballIsUp, keepBallAttached) {
+function takeBallHandler(evt, ball, player, camera, ballIsUp) {
   if (!ballIsUp) {
 	playerPos = player.position;
 	playerRot = camera.rotation;
-	
+
 	if (evt.type === 'mousedown' && evt.target.id == 'ball') {
 	  interPoint = evt.detail.intersection.point;
 	  console.log('You clicked at: ', interPoint);

@@ -66,14 +66,14 @@ AFRAME.registerComponent('ball-events', {
 
     /* Pick up the ball on X PS4 controller button press */
     window.addEventListener('gamepadbuttondown', function (evt) {
-      if(evt.detail.index == 0 && takeBallHandler(evt, ball, player, camera)) {
+      if(evt.detail.index == 0 && takeBallHandler(evt, ball, player, camera, ballIsUp)) {
         keepBallAttached = true;
         ballIsUp = true;
       }
     });
     /* Pick up the ball on mouse click */
     window.addEventListener('mousedown', function (evt) {  
-      if(takeBallHandler(evt, ball, player, camera)) {
+      if(takeBallHandler(evt, ball, player, camera, ballIsUp)) {
         keepBallAttached = true;
         ballIsUp = true;
       }
