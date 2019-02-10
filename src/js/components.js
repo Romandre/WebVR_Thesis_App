@@ -1,15 +1,3 @@
-var ballIsUp = false;
-var keepBallAttached = false;
-var countKeyHold = 0;
-var fired = false;
-
-/* Ball resistance to movement */
-var linDamp = 0.1;
-
-/* Ball resistance to rotation */
-var angDamp = 0.4;
-
-
 /****************************\
 |* Register scene component *|
 \****************************/
@@ -31,6 +19,7 @@ AFRAME.registerComponent('#player', {
   }
 });
 
+
 /*****************************\
 |* Register camera component *|
 \*****************************/
@@ -45,9 +34,20 @@ AFRAME.registerComponent('#camera', {
 /***************************\
 |* Register ball component *|
 \***************************/
+var ballIsUp = false;
+var keepBallAttached = false;
+var countKeyHold = 0;
+var fired = false;
+
+/* Ball resistance to movement */
+var linDamp = 0.1;
+
+/* Ball resistance to rotation */
+var angDamp = 0.4;
+
 AFRAME.registerComponent('ball-events', {
   init: function () {
-    var player, camera, playerPos, playerRot, interPoint;
+    var player, camera, playerPos, playerRot, interPoint, time;
 
     /* Init ball */
     ball = this.el;
@@ -60,82 +60,117 @@ AFRAME.registerComponent('ball-events', {
     }, 100);
 
 
-    /** Ball actions registration **/
+    /*** Ball actions registration ***/
     player = document.querySelector('#player').object3D,
     camera = document.querySelector('#camera').object3D;
 
-    /* Pick up the ball event on mouse click */
-    ball.addEventListener('mousedown', function (evt) {  
-      if (!ballIsUp) {
-        playerPos = player.position;
-        playerRot = camera.rotation;
-        interPoint = evt.detail.intersection.point;
-        console.log('You clicked at: ', interPoint);
-        console.log(evt.target.id);
-
-        // Calculate distance between camera and the ball
-        var dx = playerPos.x - ball.object3D.position.x; 
-        var dy = playerPos.y - ball.object3D.position.y; 
-        var dz = playerPos.z - ball.object3D.position.z; 
-        var distance = dx*dx+dy*dy+dz*dz;
-        console.log('Distance: ', distance);
-
-        if (distance < 4) {
-          console.log('Ball picked up!');
-          takeBall(ball, playerPos, playerRot, null, null); 
-          keepBallAttached = true;
-          ballIsUp = true;
-        }
-      }  
-    });
-      
-    /* Start count power time on space bar keydown */
-    window.addEventListener("keydown", (e) => {
-      if (e.keyCode == 32 && ballIsUp) {
-        ++countKeyHold;
-        //console.log("Consecutive keyDown events: " + countKeyHold*1.3); 
-        if(!fired) {
-          fired = true;
-          startPowerbar();
-        }
+    /* Pick up the ball on X PS4 controller button press */
+    window.addEventListener('gamepadbuttondown', function (evt) {
+      if(evt.detail.index == 0 && takeBallHandler(evt, ball, player, camera)) {
+        keepBallAttached = true;
+        ballIsUp = true;
       }
     });
+    /* Pick up the ball on mouse click */
+    window.addEventListener('mousedown', function (evt) {  
+      if(takeBallHandler(evt, ball, player, camera)) {
+        keepBallAttached = true;
+        ballIsUp = true;
+      }
+    });
+
+      
+    /** Start count power on key or button hold **/
+    function countPower(type) {
+      if (!fired) {
+        fired = true;
+        time = new Date().getTime() / 100;
+        startPowerbar();
+      }
+    }
+
+    window.addEventListener('gamepadbuttondown', function (evt) {
+      /* on ⬜ button press */
+      if (evt.detail.index == 2 && ballIsUp) {
+        countPower('gamepad'); 
+      }
+    });
+
+    window.addEventListener("keydown", (e) => {
+     /* on space bar keydown */
+      if (e.keyCode == 32 && ballIsUp) {
+        countPower('mouse');
+      }
+    });
+
     
-    /** Throw/drop/reset the ball event **/
+    /** Throw/drop/reset the ball events **/
+    function resetVars(state) {
+      keepBallAttached = false;
+      ballIsUp = false;
+      fired = false;
+    }
+
+    function throwEvent(type) {
+      playerPos = player.position;
+      playerRot = camera.rotation;
+      stopPowerbar();
+      resetVars('onThrow');
+      
+      var power = (new Date().getTime() / 100 - time) * 1.35;
+      //console.log(power);
+
+      if (power > 22) {
+        power = 22;
+      }
+      
+      throwBall(ball, playerPos, playerRot, power, linDamp, angDamp);
+    }
+
+    window.addEventListener('gamepadbuttonup', function (evt) {
+      /* Throw if ⬜ button released */
+      if(evt.detail.index == 2 && ballIsUp) {
+        throwEvent();
+      }
+
+      /* Drop if ⭕ button is pressed */
+      if (evt.detail.index == 1 && ballIsUp) {
+        stopPowerbar();
+        resetVars();  
+        setDynamicBody(ball, linDamp, angDamp);
+      }
+
+      /* Reset the ball to original position if △ button is pressed */
+      if (evt.detail.index == 3) {
+        stopPowerbar();
+        resetVars();
+        ball.removeAttribute('dynamic-body');
+        ball.object3D.position.set(0, 3, -1.76);
+        setDynamicBody(ball, linDamp, angDamp);
+        ball.body.applyImpulse(
+          new CANNON.Vec3(getRandomNum(), 0, getRandomNum()),
+          new CANNON.Vec3()
+        );
+      }
+    });
+
     window.addEventListener("keyup", (e) => {
       /* Throw if space bar is released */
       if (e.keyCode == 32 && ballIsUp) {
-        stopPowerbar();
-        keepBallAttached = false;
-
-        if (countKeyHold > 22) {
-          countKeyHold = 22;
-        }
-        var power = countKeyHold*1.3;
-        throwBall(ball, playerPos, playerRot, power, linDamp, angDamp);
-        
-        ballIsUp = false;
-        fired = false;
-        countKeyHold = 0;       
+        throwEvent();
       } 
 
       /* Drop if "E" key is tapped */
       if (e.keyCode == 69 && ballIsUp) {
         stopPowerbar();
-        keepBallAttached = false;
-        ballIsUp = false;
-        fired = false;
-        countKeyHold = 0;  
+        resetVars();  
         setDynamicBody(ball, linDamp, angDamp);
       }
 
       /* Reset the ball to original position if "R" key is tapped */
       if (e.keyCode == 82) {
         stopPowerbar();
-        keepBallAttached = false;
-        ballIsUp = false;
-        fired = false;
-        countKeyHold = 0;  
+        resetVars();
         ball.removeAttribute('dynamic-body');
         ball.object3D.position.set(0, 3, -1.76);
         setDynamicBody(ball, linDamp, angDamp);
@@ -147,14 +182,14 @@ AFRAME.registerComponent('ball-events', {
     });
   },
 
-  /** Update ball on each tick or frame of the scene’s render loop **/
+  /*** Update ball on each tick or frame of the scene’s render loop ***/
   tock: function(time, timeDelta, evt) {
     if (keepBallAttached == true) {
       var camera = document.querySelector('#camera').object3D,
           player = document.querySelector('#player').object3D,
           playerPos = player.position,
           playerRot = camera.rotation;
-      takeBall(ball, playerPos, playerRot, time, timeDelta);  
+      attachBall(ball, playerPos, playerRot, time, timeDelta);  
     }
   }
 });
