@@ -49,24 +49,10 @@
     <script type="text/javascript" src="src/js/powerbar.js"></script>
 
     <!-- SCENE -->
+    <!-- Shall be added to disable default lite: light="defaultLightsEnabled:false" -->
     <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.7" light="defaultLightsEnabled:false">
 
       <a-sky color="#87ceeb"></a-sky>  
-
-      <!-- Player/camera --> 
-      <a-entity id="player" kinematic-body="radius: 0.2; mass: 50" position="0 0 0" movement-controls>
-        <a-entity id="camera" camera position="0 1.75 0" look-controls="pointerLockEnabled: true" velocity rotation>
-          <a-entity cursor="fuse: true; fuseTimeout: 500"
-              position="0 0 -1"
-              geometry="primitive: circle; radius: 0.007"
-              material="color: black; shader: flat; opacity: 0.4">              
-          </a-entity>
-        </a-entity>
-      </a-entity>
-
-      <a-sphere ball-events id="ball" src="src/textures/ball.png" material="normalMap:src/textures/ball_normal.png; color:#ff9622; roughness: 0.45" 
-      geometry="radius:0.16" dynamic-body="linearDamping: 0.1; angularDamping: 0.4; mass: 4" rotation shadow></a-sphere>
-
 
       <!--------------> 
       <!-- Building -->
@@ -81,13 +67,13 @@
       <!-- Right wall -->
       <a-box material="src:src/textures/wall.jpg; repeat:20 5; side: double" rotation="180 90 0" static-body position="14.6 3.5 0" material="color:#d3d3d3" 
       geometry="width:40;height:7;depth:0.4" shadow="cast:false"></a-box>
-      <a-box material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="14.6 11.230596317000915 0" geometry="width:40;height:9;
-      depth:0.1"></a-box>
+      <!--<a-box material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="14.6 11.230596317000915 0" geometry="width:40;height:9;
+      depth:0.1"></a-box>-->
       <!-- Left wall -->
       <a-box material="src:src/textures/wall.jpg; repeat:20 5; side: double" rotation="360 90 0" static-body position="-14.6 3.5 0" material="color:#d3d3d3" 
       geometry="width:40;height:7;depth:0.4" shadow="cast:false"></a-box>
-      <a-box material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="-14.6 11.230596317000915 0" geometry="width:40;
-      height:9;depth:0.1"></a-box>
+      <!--<a-box material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="-14.6 11.230596317000915 0" geometry="width:40;
+      height:9;depth:0.1"></a-box>-->
       <!-- Front wall -->
       <a-box material="src:src/textures/wall.jpg; repeat:20 16; side: double" rotation="360 0 0" static-body position="0 8 -19.965" color="#d3d3d3" 
       geometry="width:30;height:17;depth:0.4" shadow="cast:false"></a-box>
@@ -95,8 +81,27 @@
       <a-box material="src:src/textures/wall.jpg; repeat:20 16; side: double" rotation="360 0 0" static-body position="0 8 19.965" color="#d3d3d3" 
       geometry="width:30;height:17;depth:0.4" shadow="cast:false"></a-box>
       <!-- Rooth -->
+      <!--
       <a-box material="src:src/textures/wall.jpg;repeat:20 16;side:double" rotation="90 0 0" static-body position="0 16.473 0" color="#d3d3d3" 
       geometry="width:30.43;height:40.3;depth:0.4" shadow="cast:false"></a-box>
+      -->
+
+
+      <!-- Player/camera --> 
+      <a-entity id="player" kinematic-body="radius: 0.2; mass: 50" position="0 0 0" movement-controls>
+        <a-entity id="camera" camera position="0 1.75 0" look-controls="pointerLockEnabled: true" velocity rotation>
+          <a-entity cursor="fuse: true; fuseTimeout: 500"
+              position="0 0 -1"
+              geometry="primitive: circle; radius: 0.007"
+              material="color: black; shader: flat; opacity: 0.4">              
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <!-- Ball -->
+      <a-sphere ball-events id="ball" src="src/textures/ball.png" material="normalMap:src/textures/ball_normal.png; color:#ff9622; roughness: 0.45" 
+      geometry="radius:0.16" dynamic-body="linearDamping: 0.1; angularDamping: 0.4; mass: 4" rotation shadow></a-sphere>
+
 
       <!-- Lights -->
       <!-- Set 'castShadow' to true to enable shadows -->
