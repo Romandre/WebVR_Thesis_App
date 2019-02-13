@@ -10,7 +10,7 @@
   *
   */
 
-function takeBallHandler(evt, ball, player, camera, ballIsUp) {
+function takeBall(evt, ball, player, camera, ballIsUp) {
   if (!ballIsUp) {
 	playerPos = player.position;
 	playerRot = camera.rotation;
@@ -36,13 +36,13 @@ function takeBallHandler(evt, ball, player, camera, ballIsUp) {
   } 
 }
 
-function attachBall(ball, playerPos, playerRot, interPoint, time, timeDelta) {
+function attachBall(ball, playerPos, playerRot, time, timeDelta) {
   var ballObj = ball.object3D;
 
   ball.removeAttribute('dynamic-body');
   ballObj.position.set( 
     playerPos.x - Math.sin(playerRot.y) * 0.4, 
-    playerPos.y + Math.sin(playerRot.x)/4 + 1.55, 
+    playerPos.y + Math.sin(playerRot.x)/4 + 1.4, 
     playerPos.z - Math.cos(playerRot.y) * 0.4
   );
   // Math.sin(time*0.0005)*0.1 - posible to add for Y axis for balls floating animation
@@ -52,16 +52,15 @@ function attachBall(ball, playerPos, playerRot, interPoint, time, timeDelta) {
 	playerRot.z
   );
 
-  /***
-	console.log('Camer position: ', playerPos );
+  /*console.log('Camer position: ', playerPos );
 	console.log('Camer rotation: ', playerRot );
 	console.log('Distance: ', distance );
 	console.log('Element is: ', ballObject.el.id);
-	console.log('Element position: ', ballObject.position , '\n\n\n\n'); 
-  ***/	
+	console.log('Element position: ', ballObject.position , '\n\n\n\n'); */	
 }
 
-function throwBall(ball, playerPos, playerRot, power, linDamp, angDamp) {
+function throwBall(ball, camera, power, linDamp, angDamp) {
+  playerRot = camera.rotation;
   setDynamicBody(ball, linDamp, angDamp);
   ball.body.applyImpulse(
 	new CANNON.Vec3(-Math.sin(playerRot.y)*power, (Math.sin(playerRot.x)*power)*3, -Math.cos(playerRot.y)*power), /* impulse */
@@ -69,10 +68,38 @@ function throwBall(ball, playerPos, playerRot, power, linDamp, angDamp) {
   );
 }
 
+function dropBall(ball, camera, linDamp, angDamp) {
+    playerRot = camera.rotation;
+    setDynamicBody(ball, linDamp, angDamp);
+    ball.body.applyImpulse(
+      new CANNON.Vec3(-Math.sin(playerRot.y)*1.3, Math.sin(playerRot.x), -Math.cos(playerRot.y)*1.3), /* impulse */
+      new CANNON.Vec3() /* world position */ 
+    );
+}
+
+function resetBall(ball, linDamp, angDamp, setDynamic) {
+	ball.object3D.position.set(0, 4, -1.76);
+	setDynamicBody(ball, linDamp, angDamp);
+	setTimeout( function() {
+      ball.body.applyImpulse(
+        new CANNON.Vec3(getRandomNum(), 0, getRandomNum()),
+        new CANNON.Vec3()
+      );
+    }, 100);
+}
+
+
 function setDynamicBody(ball, linDamp, angDamp) {
   ball.setAttribute('dynamic-body', {
     linearDamping: linDamp,
     angularDamping: angDamp,
     mass: 4
   });
+}
+
+
+/* Get random number from -1.5 to 1.5 */
+function getRandomNum() {
+  var randomImpuls = Math.random() < 0.5 ? - 1 : 1;
+  return (Math.random() * (1.5 - 1) + 1) * randomImpuls;
 }
