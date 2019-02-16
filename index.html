@@ -9,11 +9,14 @@
     <!-- favicon-32x32.png - For Safari on Mac OS -->
     <link rel="icon" type="image/png" href="src/img/favicon-32x32.png" sizes="32x32">
 
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+
     <!-- Frameworks and libraries -->
     <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v5.0.1/dist/aframe-extras.min.js"></script>
     <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.min.js"></script>
-    <script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>
+    <!--<script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>-->
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v5.0.1/dist/aframe-extras.min.js"></script>
     <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script>
 
     <!-- Styles, scene related --> 
@@ -24,9 +27,14 @@
 
     <!-- Gamepad detect -->
     <script type="text/javascript" src="src/js/gamepad.js"></script>
+    <script type="text/javascript" src="src/js/interface.js"></script>
   </head>
   
   <body>
+    <div id="loader">
+      <div class="loading"></div>
+    </div>
+
     <div class="github">
       <a href="https://github.com/Romandre/WebVR_Thesis_App" target="_blank"><img src="src/img/github.png" width="40"></a>
     </div>
@@ -35,13 +43,30 @@
     <div class="progress" id="powerbar"></div>
 
     <!-- Controls guidence -->
-    <div class="controls">
-      <h4>Controls:</h4>
-      <p>Click left mouse button when looking on the ball to pick it up.</p>
-      <p>To throw it, press space bar. Hold for a while to make more powerful throw.</p>
-      <p>More you hold, more powerful impulse you will give to the ball.</p>
-      <p>If you changed your mind and don't want to throw it, press E key to drop it.</p>
-      <p>In case when ball is missing or you don't want to run for it, press R to reset it to original position</p>
+    <div id="controls">
+      <div class="keyboard">
+        <h4>Controls:</h4>
+        <p>Click <b>left mouse</b> button when you are close to the ball to pick it up.</p>
+        <p>To throw it, press <b>space bar</b>. Hold for a while to make more powerful throw.</p>
+        <p>More you hold, more powerful impulse you will give to the ball.</p>
+        <p>If you changed your mind and don't want to throw it, press <b>"E"</b> key to drop it.</p>
+        <p>In case when ball is missing or you don't want to run for it, press <b>"R"</b> to reset it to original position.</p>
+        <p>Press <b>"C"</b> to close/open controls menu.</p>
+        <button onclick="toggleControls()">OK</button>
+      </div>
+      <div class="gamepad">
+        <h4>PS4 gamepad controls:</h4>
+        <p>Click <span class="cross"></span> when you are close to the ball to pick it up.</p>
+        <p>To throw it, press <span class="square"></span>. Hold for a while to make more powerful throw.</p>
+        <p>More you hold, more powerful impulse you will give to the ball.</p>
+        <p>If you changed your mind and don't want to throw it, press <span class="circle"></span> to drop it.</p>
+        <p>In case when ball is missing or you don't want to run for it, press <span class="triangle"></span> to reset it to original position.</p>
+        <p>Press <b>"options"</b> to close/open controls menu.</p>
+      </div>
+      <div class="message">
+        <h4>Gamepad is not found. Please, connect gamepad and/or press some button on it to let application find device.</h4>
+        <p>Controls configured for PS4 Dualshock 4. Other controllers may not work here.</p>
+      </div>
     </div>
 
     <script type="text/javascript" src="src/js/components.js"></script>
@@ -50,8 +75,9 @@
 
     <!-- SCENE -->
     <!-- Shall be added to disable default lite: light="defaultLightsEnabled:false" -->
-    <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.7" light="defaultLightsEnabled:false">
-      <a-assets>
+    <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.7" light="defaultLightsEnabled:false"
+    loading-screen="dotsColor: red; backgroundColor: black">
+      <a-assets timeout="10000">
         <img id="wooden-floor" src="src/textures/wooden-floor.jpg">
         <img id="lines" src="src/textures/basketball-lines.png">
         <img id="wall" src="src/textures/wall.jpg">
@@ -66,15 +92,15 @@
       <a-entity id="player" kinematic-body="radius: 0.2; mass: 50" position="0 0 0" movement-controls>
         <a-entity id="camera" camera position="0 1.75 0" look-controls="pointerLockEnabled: true" velocity rotation>
           <a-entity cursor="fuse: true; fuseTimeout: 500"
-              position="0 0 -1"
-              geometry="primitive: circle; radius: 0.007"
+              position="0 0 -0.03"
+              geometry="primitive: circle; radius: 0.0002"
               material="color: black; shader: flat; opacity: 0.4">              
           </a-entity>
         </a-entity>
       </a-entity>
 
       <!-- Ball -->
-      <a-sphere ball-events id="ball" material="src:#ballTexture; normalMap:#ballMap; color:#ff9622; roughness: 0.45" 
+      <a-sphere ball id="ball" material="src:#ballTexture; normalMap:#ballMap; color:#ff9622; roughness: 0.45" 
       geometry="radius:0.16" dynamic-body rotation shadow="cast:false"></a-sphere>
 
       <!--------------> 
@@ -82,7 +108,7 @@
       <!-------------->
 
       <!-- Floor -->
-      <a-plane rotation="-90 90 0" geometry="width:40;height:30" position="0 -0.1 0" static-body></a-plane>
+      <a-box rotation="-90 90 0" geometry="width:40;height:30;depth:0.4" position="0 -0.208 0" static-body></a-box>
       <a-plane material="src:#wooden-floor;repeat:11 21" color="#fedbbc" rotation="-90 90 0" geometry="width:40;height:30" shadow="cast:false"></a-plane>
       <a-plane material="src:#lines;transparent:true" rotation="-90 90 0" geometry="width:25;height:26" position="0 0.01 0" shadow="cast:false">
       </a-plane>  
@@ -90,13 +116,13 @@
       <!-- Right wall -->
       <a-box material="src:#wall; repeat:20 5; side: double" rotation="180 90 0" static-body position="14.6 3.5 0" material="color:#d3d3d3" 
       geometry="width:40;height:7;depth:0.4" shadow="cast:false"></a-box>
-      <!--<a-box glass material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="14.6 11.230596317000915 0" geometry="width:40;height:9;
-      depth:0.1"></a-box>-->
+      <a-box glass material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="14.6 11.230596317000915 0" geometry="width:40;height:9;
+      depth:0.1"></a-box>
       <!-- Left wall -->
       <a-box material="src:#wall; repeat:20 5; side: double" rotation="360 90 0" static-body position="-14.6 3.5 0" material="color:#d3d3d3" 
       geometry="width:40;height:7;depth:0.4" shadow="cast:false"></a-box>
-      <!--<a-box glass material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="-14.6 11.230596317000915 0" geometry="width:40;
-      height:9;depth:0.1"></a-box>-->
+      <a-box glass material="side:double;color:#cfcfcf;opacity:0.12" rotation="360 90 0" static-body position="-14.6 11.230596317000915 0" geometry="width:40;
+      height:9;depth:0.1"></a-box>
       <!-- Front wall -->
       <a-box material="src:#wall; repeat:20 16; side: double" rotation="360 0 0" static-body position="0 8 -19.965" color="#d3d3d3" 
       geometry="width:30;height:17;depth:0.4" shadow="cast:false"></a-box>

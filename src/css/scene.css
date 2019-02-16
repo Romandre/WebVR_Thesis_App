@@ -1,8 +1,47 @@
+ /************/
+/** Loader **/
+#loader {
+  	position: absolute;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	top: 0;
+  	bottom: 0;
+  	left: 0;
+  	right: 0;
+  	width: 100%;
+  	height: 100%;
+  	margin: auto;
+  	background: black;
+    z-index: 10;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  	width: 45px;
+  	height: 45px;
+  	border-radius: 50%;
+  	border: 0.3rem solid rgba(255, 255, 255, 0.2);
+  	border-top-color: white;
+ 	animation: spin 1.2s infinite linear;
+}
+
+
+ /************/
+/** GitHub **/
 .github {
 	position: absolute; 
 	top: 10px; 
 	right: 10px;
-	z-index: 1;
+	z-index: 9;
 }
 
 .github img {
@@ -13,32 +52,9 @@
 	opacity: 1;
 }
 
-.controls {
-	position: absolute; 
-	bottom: 10px; 
-	right: 10px;
-	display: block;
-	padding: 2px 30px;
-	font-size: 14px;
-	background-color: rgba(255,255,255,0.4);
-	z-index: 1;
-}
-.controls h4 {
-	margin: 8px 0;
-}
-.controls p {
-    margin: 6px 0;
-}
 
-button.webvr-ui-button {
-	opacity: 0.8;
-}
-
-.aframe-inspector-opened .github,
-.aframe-inspector-opened .controls {
-	display: none !important;
-}
-
+ /**************/
+/** Powerbar **/
 #powerbar {
 	position: absolute;
 	top: 50%;
@@ -50,8 +66,108 @@ button.webvr-ui-button {
   	z-index: 1;
 }
 
-@media only screen and (max-width: 812px) {
-    .controls {
-    	display: none;
+
+ /***************/
+/** Controlls **/
+#controls {
+	position: absolute; 
+	display: none;
+  	align-items: center;
+  	justify-content: center;
+  	top: 0;
+  	bottom: 0;
+  	left: 0;
+  	right: 0;
+  	width: 100%;
+  	height: 100%;
+  	margin: auto;
+	background-color: rgba(0,0,0,0.85);
+	z-index: 1;
+}
+#controls.open {
+	display: flex;
+}
+
+#controls > div {
+	margin: 0 20px;
+	color: white;
+	text-align: center;
+	font-size: 18px;
+	font-family: 'Varela Round', sans-serif;
+}
+
+#controls.gamepad > .keyboard {
+	display: none;
+}
+#controls:not(.gamepad) > .gamepad {
+	display: none;
+}
+
+#controls .message {
+	display: none;
+}
+
+#controls h4 {
+	margin: 12px 0;
+}
+
+#controls p {
+    margin: 10px 0;
+}
+
+#controls button {
+	margin-top: 12px;
+	padding: 8px 32px;
+    background: #4CAF50;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.cross, .square, .circle, .triangle  {
+	display: inline-block;
+	background-position: center;
+  	background-repeat: no-repeat;
+  	background-size: cover;
+  	width: 16px;
+  	height: 16px;
+}
+.cross {
+	background-image: url('../img/cross_btn.png');	
+}
+.square {
+	background-image: url('../img/square_btn.png');	
+}
+.circle {
+	background-image: url('../img/circle_btn.png');	
+}
+.triangle {
+	background-image: url('../img/triangle_btn.png');	
+}
+
+ /*********************/
+/** Afreame related **/
+.aframe-inspector-opened .github,
+.aframe-inspector-opened .controls {
+	display: none !important;
+}
+
+button.webvr-ui-button {
+	opacity: 0.8;
+    z-index: 9;
+}
+
+
+ /*******************/
+/** Mobile/tablet screen **/
+@media only screen and (max-width: 991px) {
+    #controls > .keyboard {
+    	display: none !important;
     }
+
+	#controls.no-device .message {
+		display: block;
+	}
 }

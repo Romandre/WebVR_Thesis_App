@@ -1,14 +1,3 @@
-/**
-  *
-  * TODO: 
-  * 1) Make basket ring so it can let ball go through;
-  * 2) Count baskets;
-  * 3) Power increase indicator;
-  * 4) Improve scene and environment appearance;
-  * 5) Change fieldы markup lines texture;
-  * 5) Add sound effects  
-  *
-  */
 
 function takeBall(evt, ball, player, camera, ballIsUp) {
   if (!ballIsUp) {
@@ -78,14 +67,14 @@ function dropBall(ball, camera, linDamp, angDamp) {
 }
 
 function resetBall(ball, linDamp, angDamp, setDynamic) {
-	ball.object3D.position.set(0, 4, -1.76);
+	ball.object3D.position.set(0, 3, -2);
 	setDynamicBody(ball, linDamp, angDamp);
 	setTimeout( function() {
       ball.body.applyImpulse(
         new CANNON.Vec3(getRandomNum(), 0, getRandomNum()),
         new CANNON.Vec3()
       );
-    }, 100);
+    }, 50);
 }
 
 
@@ -93,7 +82,8 @@ function setDynamicBody(ball, linDamp, angDamp) {
   ball.setAttribute('dynamic-body', {
     linearDamping: linDamp,
     angularDamping: angDamp,
-    mass: 4
+    mass: 4,
+    shape: 'sphere'
   });
 }
 

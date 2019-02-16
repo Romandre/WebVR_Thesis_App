@@ -39,13 +39,13 @@ var ballIsUp = false,
     countKeyHold = 0,
     fired = false,
     /* Ball resistance to movement */
-    linDamp = 0.1,
+    linDamp = 0.07,
     /* Ball resistance to rotation */
-    angDamp = 0.4,
+    angDamp = 0.28,
     /* Enable/disable statistics */
     stats = false;
 
-AFRAME.registerComponent('ball-events', {
+AFRAME.registerComponent('ball', {
   init: function () {
     var player, camera, interPoint, time;
 
@@ -137,6 +137,17 @@ AFRAME.registerComponent('ball-events', {
         ball.removeAttribute('dynamic-body');
         resetBall(ball, linDamp, angDamp, true);
       }
+
+       /** Show scene statistics on Share button press **/
+      if (evt.detail.index == 8) {
+        if (!stats) {
+          document.querySelector('#field').setAttribute('stats', '');
+          stats = true;
+        } else {
+          document.querySelector('#field').removeAttribute('stats');
+          stats = false;
+        }
+      }
     });
 
     window.addEventListener("keyup", (e) => {
@@ -175,7 +186,7 @@ AFRAME.registerComponent('ball-events', {
 
    /**************************************************************************/
   /****** Update ball on each tick or frame of the scene’s render loop ******/
-  tock: function(time, timeDelta, evt) {
+  tick: function(time, timeDelta, evt) {
     if (keepBallAttached == true) {
       var camera = document.querySelector('#camera').object3D,
           player = document.querySelector('#player').object3D;

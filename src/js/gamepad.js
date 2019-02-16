@@ -1,17 +1,33 @@
+document.addEventListener("DOMContentLoaded", function(event) {
+  window.addEventListener("gamepadconnected", function(e) {
+    var gp = navigator.getGamepads()[e.gamepad.index];
+    console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+    gp.index, gp.id,
+    gp.buttons.length, gp.axes.length);
 
-window.addEventListener("gamepadconnected", function(e) {
-  var gp = navigator.getGamepads()[e.gamepad.index];
-  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-  gp.index, gp.id,
-  gp.buttons.length, gp.axes.length);
+    if (gp.mapping == "standard") {
+      console.log("Controller has standard mapping");
+    } else {
+      console.log("Controller does not have standard mapping");
+    }
 
-  if (gp.mapping == "standard") {
-    console.log("Controller has standard mapping");
-  } else {
-    console.log("Controller does not have standard mapping");
-  }
+    document.querySelector('#controls').classList.remove('no-device');
+    document.querySelector('#controls').classList.add("gamepad");
+  });
+
+  window.addEventListener("gamepaddisconnected", function(e) {
+    if (document.documentElement.clientWidth < 992) {
+      if (!document.querySelector('#controls').classList.contains("gamepad")) {
+        document.querySelector('#controls').classList.add('no-device');
+      }
+    } else {
+      alret('Gamepad is disconnected');
+    }
+    document.querySelector('#controls').classList.remove("gamepad");
+  });
 });
 
+/*
 var gamepads = {};
 
 window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
@@ -29,9 +45,11 @@ function gamepadHandler(event, connecting) {
     delete gamepads[gamepad.index];
   }
 }
+*/
 
 
 /** Testing gamepad button press events **/
+/*
 window.addEventListener("gamepadbuttondown", function(evt) { controllerButtonEvent(evt, true); } );
 window.addEventListener("gamepadbuttonup", function(evt) { controllerButtonEvent(evt, false); } );
 
@@ -68,3 +86,4 @@ function controllerButtonEvent(evt, pressed)
     console.log(dualshock4Buttons[evt.detail.index] + ' was released');
   }
 }
+*/
