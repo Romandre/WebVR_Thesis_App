@@ -1,52 +1,46 @@
-document.addEventListener("DOMContentLoaded", function(event) {
-  window.addEventListener("gamepadconnected", function(e) {
-    var gp = navigator.getGamepads()[e.gamepad.index];
-    console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-    gp.index, gp.id,
-    gp.buttons.length, gp.axes.length);
+var domReady = false, 
+    gamepadFound = false;  
 
-    if (gp.mapping == "standard") {
-      console.log("Controller has standard mapping");
-    } else {
-      console.log("Controller does not have standard mapping");
-    }
+window.addEventListener("gamepadconnected", function(e) {
+  var gp = navigator.getGamepads()[e.gamepad.index];
+  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+  gp.index, gp.id,
+  gp.buttons.length, gp.axes.length);
 
-    document.querySelector('#controls').classList.remove('no-device');
-    document.querySelector('#controls').classList.add("gamepad");
-  });
+  if (gp.mapping == "standard") {
+    console.log("Controller has standard mapping");
+  } else {
+    console.log("Controller does not have standard mapping");
+  }
 
-  window.addEventListener("gamepaddisconnected", function(e) {
-    if (document.documentElement.clientWidth < 992) {
-      if (!document.querySelector('#controls').classList.contains("gamepad")) {
-        document.querySelector('#controls').classList.add('no-device');
-      }
-    } else {
-      alret('Gamepad is disconnected');
-    }
-    document.querySelector('#controls').classList.remove("gamepad");
-  });
+  gamepadFound = true;
+
+  if (domReady) {
+    modifyMenu();
+  }
 });
 
-/*
-var gamepads = {};
-
-window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
-window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
-
-function gamepadHandler(event, connecting) {
-  var gamepad = event.gamepad;
-  // Note:
-  // gamepad === navigator.getGamepads()[gamepad.index]
-
-  if (connecting) {
-    gamepads[gamepad.index] = gamepad;
-    console.log(gamepads[gamepad.index]);
-  } else {
-    delete gamepads[gamepad.index];
+window.addEventListener("gamepaddisconnected", function(e) {
+  alret('Gamepad is disconnected');
+  if (document.documentElement.clientWidth < 992) {
+    if (!document.querySelector('#controls').classList.contains("gamepad")) {
+      document.querySelector('#controls').classList.add('no-device');
+    }
   }
-}
-*/
+  document.querySelector('#controls').classList.remove("gamepad");
+});
 
+document.addEventListener('DOMContentLoaded', function() {
+  if (gamepadFound) {
+    modifyMenu();
+  }
+  domReady = true;
+});
+
+function modifyMenu() {
+  document.querySelector('#controls').classList.remove('no-device');
+  document.querySelector('#controls').classList.add("gamepad");
+}
 
 /** Testing gamepad button press events **/
 /*

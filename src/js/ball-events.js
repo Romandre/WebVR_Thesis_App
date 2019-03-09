@@ -93,3 +93,35 @@ function getRandomNum() {
   var randomImpuls = Math.random() < 0.5 ? - 1 : 1;
   return (Math.random() * (1.5 - 1) + 1) * randomImpuls;
 }
+
+var ballSounds = ["src/sounds/ball1.mp3", "src/sounds/ball2.mp3", "src/sounds/ball3.mp3", "src/sounds/ball4.mp3", "src/sounds/ball5.mp3", "src/sounds/ball6.mp3", "src/sounds/ball7.mp3", "src/sounds/ball8.mp3"]
+function bounceSound(velocity) {
+	var audio = new Audio(ballSounds[Math.floor(Math.random() * ballSounds.length)]);
+	audio.volume = 0.05;
+	if (velocity.x > 10 || velocity.x < -10 || velocity.y > 10 || velocity.y < -10) {
+		audio.volume = 1;
+	} else if (velocity.x > 9 || velocity.x < -9 || velocity.y > 9 || velocity.y < -9) {
+  		audio.volume = 0.95;
+	} else if (velocity.x > 8 || velocity.x < -8 || velocity.y > 8 || velocity.y < -8) {
+		audio.volume = 0.9;
+	} else if (velocity.x > 7 || velocity.x < -7 || velocity.y > 7 || velocity.y < -7) {
+		audio.volume = 0.85;
+	} else if (velocity.x > 6 || velocity.x < -6 || velocity.y > 6 || velocity.y < -6) {
+		audio.volume = 0.8;
+	} else if (velocity.x > 5 || velocity.x < -5 || velocity.y > 5 || velocity.y < -5) {
+		audio.volume = 0.6;
+	} else if (velocity.x > 4 || velocity.x < -4 || velocity.y > 4 || velocity.y < -4) {
+  		audio.volume = 0.45;
+	} else if (velocity.x > 3 || velocity.x < -3 || velocity.y > 3 || velocity.y < -3) {
+  		audio.volume = 0.35;
+	} else if (velocity.x > 2.5 || velocity.x < -2.5 || velocity.y > 2.5 || velocity.y < -2.5) {
+  		audio.volume = 0.25;
+	} else if (velocity.x > 2 || velocity.x < -2 || velocity.y > 2 || velocity.y < -2) {
+  		audio.volume = 0.2;
+	} else if (velocity.x > 1.5 || velocity.x < -1.5 || velocity.y > 1.5 || velocity.y < -1.5 || velocity.z > 1.5 || velocity.z < -1.5) {
+		audio.volume = 0.15;
+	} else if (velocity.x > 1 || velocity.x < -1 || velocity.y > 1 || velocity.y < -1 || velocity.z > 1 || velocity.z < -1) {
+		audio.volume = 0.1;
+	}
+	audio.play();
+}

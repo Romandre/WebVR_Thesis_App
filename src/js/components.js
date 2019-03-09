@@ -25,8 +25,8 @@ AFRAME.registerComponent('#player', {
 \*****************************/
 AFRAME.registerComponent('#camera', {
 	init: function (oldData) {
-		camera = this.el.object3D;
-    el.visible = this.data;
+		camera = this.el;
+    el.visible = this.data;    
 	}
 });
 
@@ -52,6 +52,12 @@ AFRAME.registerComponent('ball', {
     /* Init ball */
     ball = this.el;
     resetBall(ball, linDamp, angDamp);
+
+    ball.addEventListener('collide', function (e) {
+      bounceSound(e.detail.target.velocity);
+      /*console.log('Ball has collided with body #' + e.detail.body.id + ' being ' + e.detail.body.el.id);
+      console.log('Ball velocity on collision: ' + e.detail.target.velocity);*/
+    });
 
 
      /*********************************************************/

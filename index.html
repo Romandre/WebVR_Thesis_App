@@ -17,6 +17,7 @@
     <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.min.js"></script>
     <!--<script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>-->
     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v5.0.1/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>
     <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script>
 
     <!-- Styles, scene related --> 
@@ -34,49 +35,17 @@
     <div id="loader">
       <div class="loading"></div>
     </div>
-
-    <div class="github">
-      <a href="https://github.com/Romandre/WebVR_Thesis_App" target="_blank"><img src="src/img/github.png" width="40"></a>
-    </div>
-
-    <!-- Power bar -->
-    <div class="progress" id="powerbar"></div>
-
-    <!-- Controls guidence -->
-    <div id="controls">
-      <div class="keyboard">
-        <h4>Controls:</h4>
-        <p>Click <b>left mouse</b> button when you are close to the ball to pick it up.</p>
-        <p>To throw it, press <b>space bar</b>. Hold for a while to make more powerful throw.</p>
-        <p>More you hold, more powerful impulse you will give to the ball.</p>
-        <p>If you changed your mind and don't want to throw it, press <b>"E"</b> key to drop it.</p>
-        <p>In case when ball is missing or you don't want to run for it, press <b>"R"</b> to reset it to original position.</p>
-        <p>Press <b>"C"</b> to close/open controls menu.</p>
-        <button onclick="toggleControls()">OK</button>
-      </div>
-      <div class="gamepad">
-        <h4>PS4 gamepad controls:</h4>
-        <p>Click <span class="cross"></span> when you are close to the ball to pick it up.</p>
-        <p>To throw it, press <span class="square"></span>. Hold for a while to make more powerful throw.</p>
-        <p>More you hold, more powerful impulse you will give to the ball.</p>
-        <p>If you changed your mind and don't want to throw it, press <span class="circle"></span> to drop it.</p>
-        <p>In case when ball is missing or you don't want to run for it, press <span class="triangle"></span> to reset it to original position.</p>
-        <p>Press <b>"options"</b> to close/open controls menu.</p>
-      </div>
-      <div class="message">
-        <h4>Gamepad is not found. Please, connect gamepad and/or press some button on it to let application find device.</h4>
-        <p>Controls configured for PS4 Dualshock 4. Other controllers may not work here.</p>
-      </div>
-    </div>
-
+    
+    <!-- Scene scripts -->
     <script type="text/javascript" src="src/js/components.js"></script>
     <script type="text/javascript" src="src/js/ball-events.js"></script>
-    <script type="text/javascript" src="src/js/powerbar.js"></script>
+  
 
     <!-- SCENE -->
     <!-- Shall be added to disable default lite: light="defaultLightsEnabled:false" -->
     <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.7" light="defaultLightsEnabled:false"
     loading-screen="dotsColor: red; backgroundColor: black">
+     
       <a-assets timeout="10000">
         <img id="wooden-floor" src="src/textures/wooden-floor.jpg">
         <img id="lines" src="src/textures/basketball-lines.png">
@@ -96,6 +65,7 @@
               geometry="primitive: circle; radius: 0.0002"
               material="color: black; shader: flat; opacity: 0.4">              
           </a-entity>
+          <!--<a-entity id="emojiEntity" geometry="primitive:plane;width:2.252199413489736;height:3;depth:3" rotation="" position="0 0 -2" material="shader:html;target:#htmlElement;transparent:true;ratio:height;fps:5;side:double;"></a-entity>-->
         </a-entity>
       </a-entity>
 
@@ -200,5 +170,44 @@
       <a-cylinder position="0 1.7385491323987807 11.79240522412766" radius="0.5" height="1.5" color="#FFC65D" static-body="sphereRadius:NaN" material="color:#6a6a6a" 
       geometry="radius:0.08;height:3.5"></a-cylinder>
     </a-scene>
+
+    <div id="htmlElement" style="background: none">
+      <div class="github">
+        <a href="https://github.com/Romandre/WebVR_Thesis_App" target="_blank"><img src="src/img/github.png" width="40"></a>
+      </div>
+
+      <!-- Power bar -->
+      <div class="progress" id="powerbar"></div>
+     
+      <!-- Controls guidence -->
+      <div id="controls">
+        <div class="keyboard">
+          <h4>Controls:</h4>
+          <p>Click <b>left mouse</b> button when you are close to the ball to pick it up.</p>
+          <p>To throw it, press <b>space bar</b>. Hold for a while to make more powerful throw.</p>
+          <p>More you hold, more powerful impulse you will give to the ball.</p>
+          <p>If you changed your mind and don't want to throw it, press <b>"E"</b> key to drop it.</p>
+          <p>In case when ball is missing or you don't want to run for it, press <b>"R"</b> to reset it to original position.</p>
+          <p>Press <b>"C"</b> to close/open controls menu.</p>
+          <button onclick="toggleControls()">OK</button>
+        </div>
+        <div class="gamepad">
+          <h4>PS4 gamepad controls:</h4>
+          <p>Click <span class="cross"></span> when you are close to the ball to pick it up.</p>
+          <p>To throw it, press <span class="square"></span>. Hold for a while to make more powerful throw.</p>
+          <p>More you hold, more powerful impulse you will give to the ball.</p>
+          <p>If you changed your mind and don't want to throw it, press <span class="circle"></span> to drop it.</p>
+          <p>In case when ball is missing or you don't want to run for it, press <span class="triangle"></span> to reset it to original position.</p>
+          <p>Press <b>"options"</b> to close/open controls menu.</p>
+        </div>
+        <div class="message">
+          <h4>Gamepad is not found. Please, connect gamepad and/or press some button on it to let application find device.</h4>
+          <p>Controls configured for PS4 Dualshock 4. Other controllers may not work here.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Powerbar script -->
+    <script type="text/javascript" src="src/js/powerbar.js"></script>
   </body>
 </html>

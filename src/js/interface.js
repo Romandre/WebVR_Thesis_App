@@ -4,43 +4,36 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			document.querySelector('#controls').classList.add('no-device');
 		}
 	}
-	
-    var scene = document.querySelector('a-scene');
-    var loader = document.querySelector('#loader');
-    var controls = document.querySelector('#controls');
-    scene.addEventListener('loaded', function (e) {
-        loader.style.display = 'none';
-        controls.classList.add('open');
-        console.log('Menu opened');
-    });
+
+	var scene = document.querySelector('a-scene');
+	var loader = document.querySelector('#loader');
+	var controls = document.querySelector('#controls');
+	scene.addEventListener('loaded', function (e) {
+	    loader.style.display = 'none';
+	    controls.classList.add('open');
+	});
 });
 
 function toggleControls() {
-var ctrls = document.getElementById("controls").classList;
-    ctrls.remove("open");
+	var ctrls = document.getElementById("controls").classList;
+    if (ctrls.contains("open")) {
+    	ctrls.remove("open");
+  	} else {
+    	ctrls.add("open");
+  	}
 }
 
 window.addEventListener('gamepadbuttondown', function (evt) {
 	/* On "options" button press */
 	if (evt.detail.index == 9) {
-		var ctrls = document.getElementById("controls").classList;
-		if (ctrls.contains("open")) {
-	    	ctrls.remove("open");
-	  	} else {
-	    	ctrls.add("open");
-	  	}
+		toggleControls();
 	}
 });
 
 window.addEventListener("keydown", (e) => {
 	/* On "C" key press */
 	if (e.keyCode == 67) {
-		var ctrls = document.getElementById("controls").classList;
-		if (ctrls.contains("open")) {
-	    	ctrls.remove("open");
-	  	} else {
-	    	ctrls.add("open");
-	  	}
+		toggleControls();
 	}
 });
 	
