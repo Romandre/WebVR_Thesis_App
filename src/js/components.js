@@ -43,7 +43,29 @@ var ballIsUp = false,
     /* Ball resistance to rotation */
     angDamp = 0.28,
     /* Enable/disable statistics */
-    stats = false;
+    stats = false,
+    /* Basket counting */
+    score = 0,
+    canCount = true,
+    scoreIncr = false,
+    /* Gamepad controls */
+    cross = 0,
+    circle = 1,
+    square = 2,
+    triangle = 3,
+    share = 8;
+
+// Mobile chrome last versions has different gamepad buttons layout, so I use that var to detect that case  
+var windowWidth = document.documentElement.clientWidth,
+    isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+if (windowWidth < 992 && isChrome) {
+  cross = 2;
+  circle = 0;
+  square = 3;
+  triangle = 4;
+  share = 10;
+}
+
 
 AFRAME.registerComponent('ball', {
   init: function () {
@@ -54,11 +76,10 @@ AFRAME.registerComponent('ball', {
     resetBall(ball, linDamp, angDamp);
 
     ball.addEventListener('collide', function (e) {
-      bounceSound(e.detail.target.velocity);
-      /*console.log('Ball has collided with body #' + e.detail.body.id + ' being ' + e.detail.body.el.id);
-      console.log('Ball velocity on collision: ' + e.detail.target.velocity);*/
+      bounceSound(e.detail.body.id, e.detail.target.velocity);
+      //console.log('Ball has collided with body #' + e.detail.body.id + ' being ' + e.detail.body.el.id);
+      //console.log('Ball velocity on collision: ' + e.detail.target.velocity);
     });
-
 
      /*********************************************************/
     /*************** Ball actions registration ***************/
@@ -67,7 +88,7 @@ AFRAME.registerComponent('ball', {
 
     /* Pick up the ball on X PS4 controller button press */
     window.addEventListener('gamepadbuttondown', function (evt) {
-      if(evt.detail.index == 0 && takeBall(evt, ball, player, camera, ballIsUp)) {
+      if(evt.detail.index == cross && takeBall(evt, ball, player, camera, ballIsUp)) {
         keepBallAttached = true;
         ballIsUp = true;
       }
@@ -92,7 +113,7 @@ AFRAME.registerComponent('ball', {
 
     window.addEventListener('gamepadbuttondown', function (evt) {
       /* on ⬜ button press */
-      if (evt.detail.index == 2 && ballIsUp) {
+      if (evt.detail.index == square && ballIsUp) {
         countPower('gamepad'); 
       }
     });
@@ -125,19 +146,19 @@ AFRAME.registerComponent('ball', {
 
     window.addEventListener('gamepadbuttonup', function (evt) {
       /** Throw if ⬜ button released **/
-      if(evt.detail.index == 2 && ballIsUp) {
+      if(evt.detail.index == square && ballIsUp) {
         throwEvent();
       }
 
       /** Drop if ⭕ button is pressed **/
-      if (evt.detail.index == 1 && ballIsUp) {
+      if (evt.detail.index == circle && ballIsUp) {
         stopPowerbar();
         resetVars();  
         dropBall(ball, camera, linDamp, angDamp);
       }
 
       /** Reset the ball to original position if △ button is pressed **/
-      if (evt.detail.index == 3) {
+      if (evt.detail.index == triangle) {
         stopPowerbar();
         resetVars();
         ball.removeAttribute('dynamic-body');
@@ -145,7 +166,7 @@ AFRAME.registerComponent('ball', {
       }
 
        /** Show scene statistics on Share button press **/
-      if (evt.detail.index == 8) {
+      if (evt.detail.index == share) {
         if (!stats) {
           document.querySelector('#field').setAttribute('stats', '');
           stats = true;
@@ -197,6 +218,31 @@ AFRAME.registerComponent('ball', {
       var camera = document.querySelector('#camera').object3D,
           player = document.querySelector('#player').object3D;
       attachBall(ball, player.position, camera.rotation, time, timeDelta);  
+    }
+
+    ballBB = new THREE.Box3().setFromObject(this.el.object3D);
+    basket = new THREE.Box3().setFromObject(document.querySelector('#basket').object3D);
+    ballDetect = new THREE.Box3().setFromObject(document.querySelector('#scoreDetect').object3D);
+    var ballOnBasket = ballBB.intersectsBox(basket);
+    var ballWentThrough = ballBB.intersectsBox(ballDetect);
+    if (ballOnBasket) {
+      scoreIncr = true;
+      setTimeout(function() {
+        scoreIncr = false;
+      }, 1500);
+    }
+    if (ballWentThrough && scoreIncr && canCount) {
+      ++score;
+      if (score < 10) {
+        score = '0' + score;
+      }
+      document.querySelector('#scoreBoard').setAttribute('value', score);
+      scoreIncr = false;
+    } else if (ballWentThrough && !scoreIncr) {
+      canCount = false;
+      setTimeout(function() {
+        canCount = true;
+      }, 1500);
     }
   }
 });

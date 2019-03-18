@@ -17,7 +17,7 @@
     <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.min.js"></script>
     <!--<script src="https://unpkg.com/aframe-physics-extras@0.1.2/dist/aframe-physics-extras.min.js"></script>-->
     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v5.0.1/dist/aframe-extras.min.js"></script>
-    <script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>
+    <!--<script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>-->
     <script src="src/webvr-ui-master/build/webvr-ui.min.js"></script>
 
     <!-- Styles, scene related --> 
@@ -59,18 +59,26 @@
 
       <!-- Player/camera --> 
       <a-entity id="player" kinematic-body="radius: 0.2; mass: 50" position="0 0 0" movement-controls>
-        <a-entity id="camera" camera position="0 1.75 0" look-controls="pointerLockEnabled: true" velocity rotation>
+        <a-entity id="camera" camera position="0 1.75 0" look-controls="pointerLockEnabled:true" velocity rotation>
           <a-entity cursor="fuse: true; fuseTimeout: 500"
               position="0 0 -0.03"
               geometry="primitive: circle; radius: 0.0002"
               material="color: black; shader: flat; opacity: 0.4">              
           </a-entity>
-          <!--<a-entity id="emojiEntity" geometry="primitive:plane;width:2.252199413489736;height:3;depth:3" rotation="" position="0 0 -2" material="shader:html;target:#htmlElement;transparent:true;ratio:height;fps:5;side:double;"></a-entity>-->
+          <a-entity 
+              id="progressLine"
+              position="0 -0.01 -0.1"
+              geometry="primitive: box; depth:0.0015;height:0.001;width:0.00001"
+              material="color: red; shader: flat; opacity: 0.8"
+              rotation="0 0 0">              
+          </a-entity>
+          <!--<a-entity geometry="primitive:plane;width:2.25;height:3;depth:3" position="0 0 -2" material="shader:html;target:#controls;transparent:true;ratio:height;fps:5;side:double;"></a-entity>-->
         </a-entity>
       </a-entity>
 
+      
       <!-- Ball -->
-      <a-sphere ball id="ball" material="src:#ballTexture; normalMap:#ballMap; color:#ff9622; roughness: 0.45" 
+      <a-sphere ball id="ball" scale="1 1 1" material="src:#ballTexture; normalMap:#ballMap; color:#ff9622; roughness: 0.45" 
       geometry="radius:0.16" dynamic-body rotation shadow="cast:false"></a-sphere>
 
       <!--------------> 
@@ -160,9 +168,10 @@
       <a-entity position="0 3.11 -10.18" rotation="0 90 0" geometry="depth:0.24;height:0.04;width:0.03" static-body visible="false"></a-entity>
       <a-entity position="-0.226 3.11 -10.05" rotation="0 -31,4 0" geometry="depth:0.24;height:0.04;width:0.03" static-body visible="false"></a-entity>
       <a-entity position="-0.226 3.11 -9.79" rotation="0 31.4 0" geometry="depth:0.24;height:0.04;width:0.03" static-body visible="false"></a-entity>
+      <a-entity id="basket" position="0 3.2 -9.92" geometry="depth:0.08;height:0.001;width:0.08" material="color:#ff0000" visible="false"></a-entity>
+      <a-entity id="scoreDetect" position="0 2.6 -9.92" geometry="depth:0.5;height:0.001;width:0.5" material="color:#ff0000" visible="false"></a-entity>
 
-
-      <a-text value="00" color="#f20000" position="-0.23258935576853024 4.343195670737988 -10.422916031131408" scale="1.5 1.5 1.5"></a-text>
+      <a-text id="scoreBoard" value="00" color="#f20000" position="-0.23258935576853024 4.343195670737988 -10.422916031131408" scale="1.5 1.5 1.5"></a-text>
 
       <!-- Back net -->
       <a-box position="-0.01327844524949022 0.01654873162503756 11.799238424831875" color="#4CC3D9" material="color:#3c3c3c" geometry="width:1.5;depth:0.8;height:0.1" 
@@ -171,39 +180,37 @@
       geometry="radius:0.08;height:3.5"></a-cylinder>
     </a-scene>
 
-    <div id="htmlElement" style="background: none">
-      <div class="github">
-        <a href="https://github.com/Romandre/WebVR_Thesis_App" target="_blank"><img src="src/img/github.png" width="40"></a>
-      </div>
+    <div class="github">
+      <a href="https://github.com/Romandre/WebVR_Thesis_App" target="_blank"><img src="src/img/github.png" width="40"></a>
+    </div>
 
-      <!-- Power bar -->
-      <div class="progress" id="powerbar"></div>
-     
-      <!-- Controls guidence -->
-      <div id="controls">
-        <div class="keyboard">
-          <h4>Controls:</h4>
-          <p>Click <b>left mouse</b> button when you are close to the ball to pick it up.</p>
-          <p>To throw it, press <b>space bar</b>. Hold for a while to make more powerful throw.</p>
-          <p>More you hold, more powerful impulse you will give to the ball.</p>
-          <p>If you changed your mind and don't want to throw it, press <b>"E"</b> key to drop it.</p>
-          <p>In case when ball is missing or you don't want to run for it, press <b>"R"</b> to reset it to original position.</p>
-          <p>Press <b>"C"</b> to close/open controls menu.</p>
-          <button onclick="toggleControls()">OK</button>
-        </div>
-        <div class="gamepad">
-          <h4>PS4 gamepad controls:</h4>
-          <p>Click <span class="cross"></span> when you are close to the ball to pick it up.</p>
-          <p>To throw it, press <span class="square"></span>. Hold for a while to make more powerful throw.</p>
-          <p>More you hold, more powerful impulse you will give to the ball.</p>
-          <p>If you changed your mind and don't want to throw it, press <span class="circle"></span> to drop it.</p>
-          <p>In case when ball is missing or you don't want to run for it, press <span class="triangle"></span> to reset it to original position.</p>
-          <p>Press <b>"options"</b> to close/open controls menu.</p>
-        </div>
-        <div class="message">
-          <h4>Gamepad is not found. Please, connect gamepad and/or press some button on it to let application find device.</h4>
-          <p>Controls configured for PS4 Dualshock 4. Other controllers may not work here.</p>
-        </div>
+    <!-- Power bar -->
+    <div class="progress" id="powerbar"></div>
+   
+    <!-- Controls guidence -->
+    <div id="controls">
+      <div class="keyboard">
+        <h4>Controls:</h4>
+        <p>Click <b>left mouse</b> button when you are close to the ball to pick it up.</p>
+        <p>To throw it, press <b>space bar</b>. Hold for a while to make more powerful throw.</p>
+        <p>More you hold, more powerful impulse you will give to the ball.</p>
+        <p>If you changed your mind and don't want to throw it, press <b>"E"</b> key to drop it.</p>
+        <p>In case when ball is missing or you don't want to run for it, press <b>"R"</b> to reset it to original position.</p>
+        <p>Press <b>"C"</b> to close/open controls menu.</p>
+        <button onclick="toggleControls()">OK</button>
+      </div>
+      <div class="gamepad">
+        <h4>PS4 gamepad controls:</h4>
+        <p>Click <span class="cross"></span> when you are close to the ball to pick it up.</p>
+        <p>To throw it, press <span class="square"></span>. Hold for a while to make more powerful throw.</p>
+        <p>More you hold, more powerful impulse you will give to the ball.</p>
+        <p>If you changed your mind and don't want to throw it, press <span class="circle"></span> to drop it.</p>
+        <p>In case when ball is missing or you don't want to run for it, press <span class="triangle"></span> to reset it to original position.</p>
+        <p>Press <b>"options"</b> to close/open controls menu.</p>
+      </div>
+      <div class="message">
+        <h4>Gamepad is not found. Please, connect gamepad and/or press some button on it to let application find device.</h4>
+        <p>Controls configured for PS4 Dualshock 4. Other controllers may not work here.</p>
       </div>
     </div>
 

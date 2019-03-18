@@ -4,15 +4,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			document.querySelector('#controls').classList.add('no-device');
 		}
 	}
+});
 
-	var scene = document.querySelector('a-scene');
+document.onreadystatechange = function () {
+  if(document.readyState === "complete"){
+    var scene = document.querySelector('a-scene');
 	var loader = document.querySelector('#loader');
 	var controls = document.querySelector('#controls');
-	scene.addEventListener('loaded', function (e) {
-	    loader.style.display = 'none';
-	    controls.classList.add('open');
-	});
-});
+	loader.style.display = 'none';
+    controls.classList.add('open');
+  }
+}
 
 function toggleControls() {
 	var ctrls = document.getElementById("controls").classList;
@@ -23,9 +25,17 @@ function toggleControls() {
   	}
 }
 
+// Mobile chrome last versions has different gamepad buttons layout, so I use that var to detect that case  
+var isMobileChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime),
+	options = 9;
+if (document.documentElement.clientWidth < 992 && isMobileChrome) {
+	alert('Hello from Chrome!');
+  	options = 11;
+}
+
 window.addEventListener('gamepadbuttondown', function (evt) {
 	/* On "options" button press */
-	if (evt.detail.index == 9) {
+	if (evt.detail.index == options) {
 		toggleControls();
 	}
 });

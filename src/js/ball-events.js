@@ -6,8 +6,8 @@ function takeBall(evt, ball, player, camera, ballIsUp) {
 
 	if (evt.type === 'mousedown' && evt.target.id == 'ball') {
 	  interPoint = evt.detail.intersection.point;
-	  console.log('You clicked at: ', interPoint);
-	  console.log(evt.target.id);
+	  //console.log('You clicked at: ', interPoint);
+	  //console.log(evt.target.id);
 	}
 
 	// Calculate distance between camera and the ball
@@ -18,7 +18,7 @@ function takeBall(evt, ball, player, camera, ballIsUp) {
 	//console.log('Distance: ', distance);
 
 	if (distance < 3.5) {
-	  console.log('Ball picked up!');
+	  //console.log('Ball picked up!');
 	  attachBall(ball, playerPos, playerRot, null, null);
 	  return true;
 	}
@@ -31,7 +31,7 @@ function attachBall(ball, playerPos, playerRot, time, timeDelta) {
   ball.removeAttribute('dynamic-body');
   ballObj.position.set( 
     playerPos.x - Math.sin(playerRot.y) * 0.4, 
-    playerPos.y + Math.sin(playerRot.x)/4 + 1.4, 
+    playerPos.y + Math.sin(playerRot.x)/2.5 + 1.4, 
     playerPos.z - Math.cos(playerRot.y) * 0.4
   );
   // Math.sin(time*0.0005)*0.1 - posible to add for Y axis for balls floating animation
@@ -94,10 +94,18 @@ function getRandomNum() {
   return (Math.random() * (1.5 - 1) + 1) * randomImpuls;
 }
 
-var ballSounds = ["src/sounds/ball1.mp3", "src/sounds/ball2.mp3", "src/sounds/ball3.mp3", "src/sounds/ball4.mp3", "src/sounds/ball5.mp3", "src/sounds/ball6.mp3", "src/sounds/ball7.mp3", "src/sounds/ball8.mp3"]
-function bounceSound(velocity) {
-	var audio = new Audio(ballSounds[Math.floor(Math.random() * ballSounds.length)]);
-	audio.volume = 0.05;
+
+/* Apply sounds on ball colide */ 
+var ballSounds1 = ["src/sounds/ball1.mp3", "src/sounds/ball2.mp3", "src/sounds/ball3.mp3", "src/sounds/ball4.mp3", "src/sounds/ball5.mp3", "src/sounds/ball7.mp3"];
+var	ballSounds2 = ["src/sounds/ball1.mp3", "src/sounds/ball2.mp3", "src/sounds/ball3.mp3", "src/sounds/ball4.mp3", "src/sounds/ball5.mp3", "src/sounds/ball7.mp3", "src/sounds/ball6.mp3", "src/sounds/ball8.mp3"];
+function bounceSound(bodyId, velocity) {
+	var audio;
+	if (bodyId >= 0 && bodyId <= 8) {
+		audio = new Audio(ballSounds1[Math.floor(Math.random() * ballSounds1.length)]);
+	} else {
+		audio = new Audio(ballSounds2[Math.floor(Math.random() * ballSounds2.length)]);
+	}
+	audio.volume = 0.02;
 	if (velocity.x > 10 || velocity.x < -10 || velocity.y > 10 || velocity.y < -10) {
 		audio.volume = 1;
 	} else if (velocity.x > 9 || velocity.x < -9 || velocity.y > 9 || velocity.y < -9) {
@@ -119,9 +127,9 @@ function bounceSound(velocity) {
 	} else if (velocity.x > 2 || velocity.x < -2 || velocity.y > 2 || velocity.y < -2) {
   		audio.volume = 0.2;
 	} else if (velocity.x > 1.5 || velocity.x < -1.5 || velocity.y > 1.5 || velocity.y < -1.5 || velocity.z > 1.5 || velocity.z < -1.5) {
-		audio.volume = 0.15;
-	} else if (velocity.x > 1 || velocity.x < -1 || velocity.y > 1 || velocity.y < -1 || velocity.z > 1 || velocity.z < -1) {
 		audio.volume = 0.1;
+	} else if (velocity.x > 1 || velocity.x < -1 || velocity.y > 1 || velocity.y < -1 || velocity.z > 1 || velocity.z < -1) {
+		audio.volume = 0.05;
 	}
 	audio.play();
 }
