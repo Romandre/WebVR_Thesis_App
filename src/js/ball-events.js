@@ -31,7 +31,7 @@ function attachBall(ball, playerPos, playerRot, time, timeDelta) {
   ball.removeAttribute('dynamic-body');
   ballObj.position.set( 
     playerPos.x - Math.sin(playerRot.y) * 0.4, 
-    playerPos.y + Math.sin(playerRot.x)/2.5 + 1.4, 
+    playerPos.y + Math.sin(playerRot.x)/2.5 + 1.35, 
     playerPos.z - Math.cos(playerRot.y) * 0.4
   );
   // Math.sin(time*0.0005)*0.1 - posible to add for Y axis for balls floating animation

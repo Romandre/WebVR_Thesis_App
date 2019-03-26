@@ -1,7 +1,8 @@
 var windowWidth = document.documentElement.clientWidth,
     userAgent = navigator.userAgent || navigator.vendor || window.opera,
     progressLine = document.querySelector('#progressLine'),
-    timerId = 0;
+    animation = document.querySelector('#animation'),
+    backgroundLine = document.querySelector('#backgroundLine');
 
 /* Powerbar element */
 var powerbar = new ProgressBar.Circle('#powerbar', {
@@ -18,30 +19,28 @@ var powerbar = new ProgressBar.Circle('#powerbar', {
 });
 
 function startPowerbar() {
-  if (/android/i.test(userAgent) || (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)) {
+  //if (/android/i.test(userAgent) || (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)) {
     var lineWidth = 0;
-    timerId = setInterval(function() {
-      progressLine.setAttribute('geometry', 'primitive: box; depth:0.0015;height:0.001;width:'+ (++lineWidth)/500 );
-    }, 10);
-    setTimeout(function() {
-      clearInterval(timerId);
-    }, 1500);
-  } else {
+    animation.emit('throw');
+    backgroundLine.setAttribute('visible', '');
+    progressLine.setAttribute('visible', '');
+  /*} else {
     powerbar.set(0);
     powerbar.animate(1);
-  }
+  }*/
 }
 
 function stopPowerbar() {
-  if (/android/i.test(userAgent) || (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)) {
-    clearTimeout(timerId);
+  //if (/android/i.test(userAgent) || (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream)) {
+    animation.emit('stop');
     setTimeout(function() {
-      progressLine.setAttribute('geometry', 'primitive: box; depth:0.0015;height:0.001;width:0.00001');
+      backgroundLine.setAttribute('visible', 'false');
+      progressLine.setAttribute('visible', 'false');
     }, 1000);
-  } else {
+  /*} else {
     powerbar.stop();
     setTimeout(function() {
       powerbar.animate(0);
     }, 200);
-  }
+  }*/
 }

@@ -1,9 +1,14 @@
+var isVrModeEnabled = false;
+
 document.addEventListener("DOMContentLoaded", function(event) {
 	if (document.documentElement.clientWidth < 992) {
 		if (!document.querySelector('#controls').classList.contains("gamepad")) {
 			document.querySelector('#controls').classList.add('no-device');
 		}
 	}
+	document.querySelector('a-scene').addEventListener('enter-vr', function () {
+	   isVrModeEnabled = true;
+	});
 });
 
 document.onreadystatechange = function () {
@@ -18,18 +23,26 @@ document.onreadystatechange = function () {
 
 function toggleControls() {
 	var ctrls = document.getElementById("controls").classList;
-    if (ctrls.contains("open")) {
-    	ctrls.remove("open");
-  	} else {
-    	ctrls.add("open");
-  	}
+	var vrctrls = document.getElementById("vrcontrols");
+	if (!isVrModeEnabled) {
+		if (ctrls.contains("open")) {
+			ctrls.remove("open");
+	  	} else {
+	    	ctrls.add("open");
+	  	}
+	} else {
+		if (vrctrls.getAttribute('visible') == false) {
+	  		vrctrls.setAttribute('visible', 'true');
+	  	} else {
+	  		vrctrls.setAttribute('visible', 'false');
+	  	}
+	}
+  	 
 }
 
 // Mobile chrome last versions has different gamepad buttons layout, so I use that var to detect that case  
-var isMobileChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime),
-	options = 9;
-if (document.documentElement.clientWidth < 992 && isMobileChrome) {
-	alert('Hello from Chrome!');
+var options = 9;
+if (document.documentElement.clientWidth < 992 && /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor) ) {
   	options = 11;
 }
 

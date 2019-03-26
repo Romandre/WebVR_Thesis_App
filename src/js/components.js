@@ -55,7 +55,7 @@ var ballIsUp = false,
     triangle = 3,
     share = 8;
 
-// Mobile chrome last versions has different gamepad buttons layout, so I use that var to detect that case  
+// Mobile chrome last versions has different gamepad buttons layout, so I have to use these vars to detect that case  
 var windowWidth = document.documentElement.clientWidth,
     isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 if (windowWidth < 992 && isChrome) {
