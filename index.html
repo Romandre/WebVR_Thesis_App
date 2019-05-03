@@ -43,7 +43,7 @@
 
     <!-- SCENE -->
     <!-- Shall be added to disable default lite: light="defaultLightsEnabled:false" -->
-    <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.7" light="defaultLightsEnabled:false"
+    <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.73" light="defaultLightsEnabled:false"
     loading-screen="dotsColor: red; backgroundColor: black">
      
       <a-assets timeout="10000">
@@ -58,7 +58,7 @@
       <a-sky color="#87ceeb"></a-sky>  
 
       <!-- Player/camera --> 
-      <a-entity id="player" kinematic-body="radius: 0.2; mass: 50" position="0 0 0" movement-controls>
+      <a-entity id="player" kinematic-body="radius: 0.2" position="0 0 0" movement-controls>
         <a-entity id="camera" camera position="0 1.75 0" look-controls="pointerLockEnabled:true" velocity rotation>
           <a-entity id="vrcontrols" visible="false" geometry="primitive: plane; width: 0.25; height: auto" text="value: PS4 gamepad controls:\nPress 'cross' when you are close to the ball to pick it up.\nTo throw it, press 'square'. Hold for a while to make more powerful throw.\nMore you hold, more powerful impulse you will give to the ball.\nIf you changed your mind and don't want to throw it, press 'sircle' to drop it.\nIn case when ball is missing or you don't want to run for it, press 'triangle' to reset it to original position.\nPress 'options' to close/open controls menu.\n\n; width: 0.27; align: center; wrapCount: 100; lineHeight: 120;font: mozillavr" position="0 0 -0.13" material="color: #000000"></a-entity>
           <a-entity cursor="fuse: true; fuseTimeout: 500"

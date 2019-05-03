@@ -19,6 +19,8 @@ function takeBall(evt, ball, player, camera, ballIsUp) {
 
 	if (distance < 3.5) {
 	  //console.log('Ball picked up!');
+	  ball.setAttribute('material', 'opacity:0.6');
+	  ball.removeAttribute('dynamic-body');
 	  attachBall(ball, playerPos, playerRot, null, null);
 	  return true;
 	}
@@ -79,6 +81,7 @@ function resetBall(ball, linDamp, angDamp, setDynamic) {
 
 
 function setDynamicBody(ball, linDamp, angDamp) {
+  ball.setAttribute('material', 'opacity:1');
   ball.setAttribute('dynamic-body', {
     linearDamping: linDamp,
     angularDamping: angDamp,

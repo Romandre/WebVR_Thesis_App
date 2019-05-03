@@ -9,6 +9,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	document.querySelector('a-scene').addEventListener('enter-vr', function () {
 	   isVrModeEnabled = true;
 	});
+
+	document.querySelector('a-scene').addEventListener('exit-vr', function () {
+	   document.getElementById("vrcontrols").setAttribute('visible', 'false');
+	   isVrModeEnabled = false;
+	});
 });
 
 document.onreadystatechange = function () {
