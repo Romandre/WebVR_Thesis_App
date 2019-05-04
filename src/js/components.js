@@ -213,7 +213,7 @@ AFRAME.registerComponent('ball', {
 
    /**************************************************************************/
   /****** Update ball on each tick or frame of the scene’s render loop ******/
-  tick: function(time, timeDelta, evt) {
+  tock: function(time, timeDelta, evt) {
     if (keepBallAttached == true) {
       var camera = document.querySelector('#camera').object3D,
           player = document.querySelector('#player').object3D;
