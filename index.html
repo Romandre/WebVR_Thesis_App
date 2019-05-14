@@ -42,8 +42,7 @@
   
 
     <!-- SCENE -->
-    <!-- Shall be added to disable default lite: light="defaultLightsEnabled:false" -->
-    <a-scene webvr-ui id="field" physics="gravity: -9.8; friction: 0.8; restitution: 0.73" light="defaultLightsEnabled:false"
+    <a-scene id="scene" webvr-ui physics="gravity: -9.8; friction: 0.8; restitution: 0.73" light="defaultLightsEnabled:false"
     loading-screen="dotsColor: red; backgroundColor: black">
      
       <a-assets timeout="10000">
@@ -63,7 +62,7 @@
           <a-entity id="vrcontrols" visible="false" geometry="primitive: plane; width: 0.25; height: auto" text="value: PS4 gamepad controls:\nPress 'cross' when you are close to the ball to pick it up.\nTo throw it, press 'square'. Hold for a while to make more powerful throw.\nMore you hold, more powerful impulse you will give to the ball.\nIf you changed your mind and don't want to throw it, press 'sircle' to drop it.\nIn case when ball is missing or you don't want to run for it, press 'triangle' to reset it to original position.\nPress 'options' to close/open controls menu.\n\n; width: 0.27; align: center; wrapCount: 100; lineHeight: 120;font: mozillavr" position="0 0 -0.13" material="color: #000000"></a-entity>
           <a-entity cursor="fuse: true; fuseTimeout: 500"
               position="0 0 -0.12"
-              geometry="primitive: circle; radius: 0.0002"
+              geometry="primitive: circle; radius: 0.0008"
               material="color: black; shader: flat; opacity: 0.4">              
           </a-entity>
           <a-entity 
@@ -84,14 +83,21 @@
               material="color: black; shader: flat; opacity: 0.2"
               rotation="0 0 0">              
           </a-entity>
-          <!--<a-entity geometry="primitive:plane;width:2.25;height:3;depth:3" position="0 0 -2" material="shader:html;target:#controls;transparent:true;ratio:height;fps:5;side:double;"></a-entity>-->
         </a-entity>
       </a-entity>
 
-      
       <!-- Ball -->
       <a-sphere ball id="ball" scale="1 1 1" material="src:#ballTexture; normalMap:#ballMap; color:#ff9622; roughness: 0.45" 
-      geometry="radius:0.16" dynamic-body rotation shadow="cast:false"></a-sphere>
+      geometry="radius:0.16" dynamic-body rotation shadow="receive:false;cast:false"></a-sphere>
+
+      <!-- Lights -->
+      <!-- Set 'castShadow' to true to enable shadows -->
+      <a-entity position="6.8 14.8 0" light="type:point; intensity:0.22; castShadow:false; shadowMapHeight:1024; shadowMapWidth:1024"></a-entity>
+      <a-entity position="-6.8 14.8 0" light="type:point; intensity:0.22; castShadow:false; shadowMapHeight:1024; shadowMapWidth:1024"></a-entity>
+      <a-entity position="6.8 14.766 -13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
+      <a-entity position="-6.8 14.766 -13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
+      <a-entity position="6.8 14.766 13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
+      <a-entity position="-6.8 14.766 13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
 
       <!--------------> 
       <!-- Building -->
@@ -122,15 +128,6 @@
       <!-- Rooth -->
       <a-box material="src:#wall;repeat:20 16;side:double" rotation="90 0 0" static-body position="0 16.473 0" color="#d3d3d3" 
       geometry="width:30.43;height:40.3;depth:0.4" shadow="cast:false"></a-box>
-
-      <!-- Lights -->
-      <!-- Set 'castShadow' to true to enable shadows -->
-      <a-entity position="6.8 14.8 0" light="type:point; intensity:0.22; castShadow:false; shadowMapHeight:1024; shadowMapWidth:1024"></a-entity>
-      <a-entity position="-6.8 14.8 0" light="type:point; intensity:0.22; castShadow:false; shadowMapHeight:1024; shadowMapWidth:1024"></a-entity>
-      <a-entity position="6.8 14.766 -13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
-      <a-entity position="-6.8 14.766 -13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
-      <a-entity position="6.8 14.766 13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
-      <a-entity position="-6.8 14.766 13.3" light="type:point; intensity:0.22; castShadow:false"></a-entity>
 
       <!-- Front net -->
       <a-box material="src:#plastic;color:#FFF"  position="0 0.13190934689389777 -12.72" static-body geometry="width:1.5;depth:0.8;height:0.1" 
@@ -186,10 +183,12 @@
       <a-text id="scoreBoard" value="00" color="#f20000" position="-0.23258935576853024 4.343195670737988 -10.422916031131408" scale="1.5 1.5 1.5"></a-text>
 
       <!-- Back net -->
+      <!--
       <a-box position="-0.01327844524949022 0.01654873162503756 11.799238424831875" color="#4CC3D9" material="color:#3c3c3c" geometry="width:1.5;depth:0.8;height:0.1" 
       rotation="-3.013047660283962e-8 0 -0.000001126271860120327" velocity=""></a-box>
       <a-cylinder position="0 1.7385491323987807 11.79240522412766" radius="0.5" height="1.5" color="#FFC65D" static-body="sphereRadius:NaN" material="color:#6a6a6a" 
       geometry="radius:0.08;height:3.5"></a-cylinder>
+      -->
     </a-scene>
 
     <div class="github">

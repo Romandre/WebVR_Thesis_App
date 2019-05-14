@@ -1,35 +1,3 @@
-/****************************\
-|* Register scene component *|
-\****************************/
-AFRAME.registerComponent('#field', {
-  init: function (oldData) {
-    el = this.el.object3D;
-    el.visible = this.data;
-  }
-});
-
-
-/*****************************\
-|* Register camera component *|
-\*****************************/
-AFRAME.registerComponent('#player', {
-  init: function (oldData) {
-    player = this.el.object3D;
-    el.visible = this.data;
-  }
-});
-
-
-/*****************************\
-|* Register camera component *|
-\*****************************/
-AFRAME.registerComponent('#camera', {
-	init: function (oldData) {
-		camera = this.el;
-    el.visible = this.data;    
-	}
-});
-
 
 /***************************\
 |* Register ball component *|
@@ -168,10 +136,10 @@ AFRAME.registerComponent('ball', {
        /** Show scene statistics on Share button press **/
       if (evt.detail.index == share) {
         if (!stats) {
-          document.querySelector('#field').setAttribute('stats', '');
+          document.querySelector('#scene').setAttribute('stats', '');
           stats = true;
         } else {
-          document.querySelector('#field').removeAttribute('stats');
+          document.querySelector('#scene').removeAttribute('stats');
           stats = false;
         }
       }
@@ -201,10 +169,10 @@ AFRAME.registerComponent('ball', {
       /** Show scene statistics by "Q" key press **/
       if (e.keyCode == 81) {
         if (!stats) {
-          document.querySelector('#field').setAttribute('stats', '');
+          document.querySelector('#scene').setAttribute('stats', '');
           stats = true;
         } else {
-          document.querySelector('#field').removeAttribute('stats');
+          document.querySelector('#scene').removeAttribute('stats');
           stats = false;
         }
       }
@@ -220,6 +188,8 @@ AFRAME.registerComponent('ball', {
       attachBall(ball, player.position, camera.rotation, time, timeDelta);  
     }
 
+
+    /* Basket related actions */
     ballBB = new THREE.Box3().setFromObject(this.el.object3D);
     basket = new THREE.Box3().setFromObject(document.querySelector('#basket').object3D);
     ballDetect = new THREE.Box3().setFromObject(document.querySelector('#scoreDetect').object3D);
